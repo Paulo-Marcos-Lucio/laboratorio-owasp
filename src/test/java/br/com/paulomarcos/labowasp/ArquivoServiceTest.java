@@ -2,6 +2,7 @@ package br.com.paulomarcos.labowasp;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import br.com.paulomarcos.labowasp.a01path.ArquivoService;
 import java.nio.file.Files;
@@ -38,5 +39,22 @@ class ArquivoServiceTest {
         Files.writeString(base.resolve("catalogo.txt"), "conteudo ok");
 
         assertThat(service.lerCorrigido(base, "catalogo.txt")).isEqualTo("conteudo ok");
+    }
+
+    // Regressão: com um base RELATIVO contendo ".." inicial, normalizar antes de tornar
+    // absoluto deixava o ".." na base e recusava um arquivo legítimo. A ordem correta
+    // (toAbsolutePath().normalize()) resolve o caminho e o arquivo passa a ser aceito.
+    @Test
+    void corrigidoAceitaArquivoInternoComBaseRelativaComDotDot(@TempDir Path tmp) throws Exception {
+        Path base = Files.createDirectory(tmp.resolve("publicos"));
+        Files.writeString(base.resolve("catalogo.txt"), "conteudo ok");
+
+        Path cwd = Path.of("").toAbsolutePath();
+        assumeTrue(base.getRoot() != null && base.getRoot().equals(cwd.getRoot()),
+                "base e CWD em roots diferentes — cenário de caminho relativo não se aplica");
+        Path baseRelativa = cwd.relativize(base);
+        assumeTrue(baseRelativa.startsWith(".."), "não gerou base relativa com '..' inicial");
+
+        assertThat(service.lerCorrigido(baseRelativa, "catalogo.txt")).isEqualTo("conteudo ok");
     }
 }

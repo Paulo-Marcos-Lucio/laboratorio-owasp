@@ -25,9 +25,15 @@ public class IdorController {
             2L, new Nota(2L, "bob", "Anotacoes do Bob"));
 
     @GetMapping("/vulneravel/{id}")
-    public Nota vulneravel(@PathVariable long id, @RequestHeader("X-Usuario") String usuario) {
-        // Não confere o dono: qualquer usuário lê a nota de qualquer outro.
-        return notas.get(id);
+    public ResponseEntity<Nota> vulneravel(
+            @PathVariable long id, @RequestHeader("X-Usuario") String usuario) {
+        Nota nota = notas.get(id);
+        if (nota == null) {
+            // id inexistente é 404 — não 200 com corpo vazio (fail-silent).
+            return ResponseEntity.notFound().build();
+        }
+        // IDOR preservado de propósito: NÃO confere o dono — qualquer usuário lê a nota alheia.
+        return ResponseEntity.ok(nota);
     }
 
     @GetMapping("/corrigido/{id}")

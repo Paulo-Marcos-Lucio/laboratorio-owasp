@@ -22,7 +22,10 @@ public class ArquivoService {
     }
 
     public String lerCorrigido(Path base, String nome) throws IOException {
-        Path baseNormalizado = base.normalize().toAbsolutePath();
+        // toAbsolutePath() ANTES de normalize(): um base relativo com ".." inicial só
+        // resolve corretamente depois de virar absoluto — a ordem trocada deixava o
+        // ".." na base e passava a recusar arquivos legítimos.
+        Path baseNormalizado = base.toAbsolutePath().normalize();
         Path alvo = baseNormalizado.resolve(nome).normalize();
         if (!alvo.startsWith(baseNormalizado)) {
             throw new SecurityException("Acesso negado: caminho fora do diretorio permitido");

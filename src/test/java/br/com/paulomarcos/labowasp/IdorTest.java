@@ -37,4 +37,12 @@ class IdorTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.dono").value("bob"));
     }
+
+    // Regressão: id inexistente devolvia 200 com corpo vazio (fail-silent). Agora é 404,
+    // sem deixar de preservar o IDOR (nenhuma checagem de dono) no endpoint vulnerável.
+    @Test
+    void vulneravelIdInexistenteRetorna404() throws Exception {
+        mvc.perform(get("/a01/idor/vulneravel/999").header("X-Usuario", "bob"))
+                .andExpect(status().isNotFound());
+    }
 }
