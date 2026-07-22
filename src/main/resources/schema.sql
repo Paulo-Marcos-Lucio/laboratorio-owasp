@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS produtos (
+    id   INT PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL
+);

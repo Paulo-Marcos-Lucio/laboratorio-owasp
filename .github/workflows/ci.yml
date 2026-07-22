@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build · Testes (JUnit)
+    runs-on: ubuntu-latest
+    steps:
+      # actions fixadas por SHA (a mesma prática que o Esteira exige).
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - run: chmod +x ./mvnw
+      - name: Testes (exploit vs correção)
+        run: ./mvnw -B test
