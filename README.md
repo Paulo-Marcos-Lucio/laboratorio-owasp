@@ -40,6 +40,7 @@ Se os testes passam, a demonstração é honesta: a falha é real e a correção
 | --- | --- | --- | --- |
 | **A03** | SQL Injection (CWE-89) | [`a03sqli`](src/main/java/br/com/paulomarcos/labowasp/a03sqli) | [`SqlInjectionTest`](src/test/java/br/com/paulomarcos/labowasp/SqlInjectionTest.java) |
 | **A03** | XSS refletido (CWE-79) | [`a03xss`](src/main/java/br/com/paulomarcos/labowasp/a03xss) | [`XssTest`](src/test/java/br/com/paulomarcos/labowasp/XssTest.java) |
+| **A03** | Command Injection (CWE-78) | [`a03cmd`](src/main/java/br/com/paulomarcos/labowasp/a03cmd) | [`CommandInjectionTest`](src/test/java/br/com/paulomarcos/labowasp/CommandInjectionTest.java) |
 | **A01** | IDOR — Broken Access Control (CWE-639) | [`a01idor`](src/main/java/br/com/paulomarcos/labowasp/a01idor) | [`IdorTest`](src/test/java/br/com/paulomarcos/labowasp/IdorTest.java) |
 | **A01** | Path Traversal (CWE-22) | [`a01path`](src/main/java/br/com/paulomarcos/labowasp/a01path) | [`ArquivoServiceTest`](src/test/java/br/com/paulomarcos/labowasp/ArquivoServiceTest.java) |
 | **A01** | Open Redirect (CWE-601) | [`a01redirect`](src/main/java/br/com/paulomarcos/labowasp/a01redirect) | [`OpenRedirectTest`](src/test/java/br/com/paulomarcos/labowasp/OpenRedirectTest.java) |
@@ -67,6 +68,10 @@ curl "http://localhost:8080/a03/sqli/corrigido?nome=Notebook' OR '1'='1"
 curl "http://localhost:8080/a03/xss/vulneravel?q=<script>alert(1)</script>"
 curl "http://localhost:8080/a03/xss/corrigido?q=<script>alert(1)</script>"
 
+# A03 — Command Injection: o "&& echo" roda um 2º comando (vulnerável) vs. 400 (corrigido)
+curl "http://localhost:8080/a03/cmd/vulneravel?host=127.0.0.1 && echo INJETADO"
+curl -i "http://localhost:8080/a03/cmd/corrigido?host=127.0.0.1 && echo INJETADO"
+
 # A01 — IDOR: bob lê a nota da alice (vulnerável) vs. 403 (corrigido)
 curl -H "X-Usuario: bob" http://localhost:8080/a01/idor/vulneravel/1
 curl -i -H "X-Usuario: bob" http://localhost:8080/a01/idor/corrigido/1
@@ -92,11 +97,12 @@ src/main/java/.../labowasp/
 ├── a01path/    Path Traversal — normalização + confinamento ao diretório-base
 ├── a01redirect/ Open Redirect — só aceita caminho relativo ao próprio app
 ├── a02crypto/  Hash de senha — MD5 (errado) vs BCrypt (certo)
+├── a03cmd/     Command Injection — shell com entrada concatenada vs allowlist sem shell
 ├── a03sqli/    SQL Injection — concatenação vs consulta parametrizada
 └── a03xss/     XSS — reflexão crua vs codificação de saída
 ```
 
-Cada correção aplica **o princípio certo**, não um remendo: parametrização de consulta, codificação de saída, autorização baseada em propriedade, confinamento de caminho, redirect restrito a destinos internos e hashing lento com sal.
+Cada correção aplica **o princípio certo**, não um remendo: parametrização de consulta, codificação de saída, autorização baseada em propriedade, confinamento de caminho, redirect restrito a destinos internos, validação por allowlist sem passar entrada a um shell e hashing lento com sal.
 
 ---
 
