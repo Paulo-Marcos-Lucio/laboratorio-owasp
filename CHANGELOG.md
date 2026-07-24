@@ -3,6 +3,18 @@
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 [SemVer](https://semver.org/lang/pt-BR/).
 
+## [Não lançado]
+
+### Adicionado
+
+- A01 Open Redirect (CWE-601): par vulnerável/corrigido em `a01redirect`. O
+  `/vulneravel` redireciona para qualquer destino recebido; o `/corrigido` só aceita
+  caminhos relativos ao próprio app, recusando URLs absolutas e as variações
+  protocolo-relativas (`//host`, `/\host`) que o navegador trata como externas.
+- `OpenRedirectTest` com 5 casos: exploit externo no lado vulnerável, bloqueio de
+  destino externo, protocolo-relativo e truque de barra invertida no corrigido, e
+  redirect interno legítimo preservado.
+
 ## [0.1.0] — 2026-07-21
 
 ### Adicionado

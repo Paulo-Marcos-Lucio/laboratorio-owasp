@@ -42,6 +42,7 @@ Se os testes passam, a demonstração é honesta: a falha é real e a correção
 | **A03** | XSS refletido (CWE-79) | [`a03xss`](src/main/java/br/com/paulomarcos/labowasp/a03xss) | [`XssTest`](src/test/java/br/com/paulomarcos/labowasp/XssTest.java) |
 | **A01** | IDOR — Broken Access Control (CWE-639) | [`a01idor`](src/main/java/br/com/paulomarcos/labowasp/a01idor) | [`IdorTest`](src/test/java/br/com/paulomarcos/labowasp/IdorTest.java) |
 | **A01** | Path Traversal (CWE-22) | [`a01path`](src/main/java/br/com/paulomarcos/labowasp/a01path) | [`ArquivoServiceTest`](src/test/java/br/com/paulomarcos/labowasp/ArquivoServiceTest.java) |
+| **A01** | Open Redirect (CWE-601) | [`a01redirect`](src/main/java/br/com/paulomarcos/labowasp/a01redirect) | [`OpenRedirectTest`](src/test/java/br/com/paulomarcos/labowasp/OpenRedirectTest.java) |
 | **A02** | Hash de senha fraco: MD5 → BCrypt (CWE-916) | [`a02crypto`](src/main/java/br/com/paulomarcos/labowasp/a02crypto) | [`HashSenhaTest`](src/test/java/br/com/paulomarcos/labowasp/HashSenhaTest.java) |
 
 ---
@@ -69,6 +70,10 @@ curl "http://localhost:8080/a03/xss/corrigido?q=<script>alert(1)</script>"
 # A01 — IDOR: bob lê a nota da alice (vulnerável) vs. 403 (corrigido)
 curl -H "X-Usuario: bob" http://localhost:8080/a01/idor/vulneravel/1
 curl -i -H "X-Usuario: bob" http://localhost:8080/a01/idor/corrigido/1
+
+# A01 — Open Redirect: destino externo redireciona (vulnerável) vs. 400 (corrigido)
+curl -i "http://localhost:8080/a01/redirect/vulneravel?destino=https://site-falso.example"
+curl -i "http://localhost:8080/a01/redirect/corrigido?destino=https://site-falso.example"
 ```
 
 ### Rodando os testes (a prova)
@@ -85,12 +90,13 @@ mvn test
 src/main/java/.../labowasp/
 ├── a01idor/    IDOR — verificação de propriedade do recurso
 ├── a01path/    Path Traversal — normalização + confinamento ao diretório-base
+├── a01redirect/ Open Redirect — só aceita caminho relativo ao próprio app
 ├── a02crypto/  Hash de senha — MD5 (errado) vs BCrypt (certo)
 ├── a03sqli/    SQL Injection — concatenação vs consulta parametrizada
 └── a03xss/     XSS — reflexão crua vs codificação de saída
 ```
 
-Cada correção aplica **o princípio certo**, não um remendo: parametrização de consulta, codificação de saída, autorização baseada em propriedade, confinamento de caminho e hashing lento com sal.
+Cada correção aplica **o princípio certo**, não um remendo: parametrização de consulta, codificação de saída, autorização baseada em propriedade, confinamento de caminho, redirect restrito a destinos internos e hashing lento com sal.
 
 ---
 
