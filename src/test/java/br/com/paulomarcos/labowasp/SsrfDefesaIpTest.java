@@ -1,0 +1,44 @@
+package br.com.paulomarcos.labowasp;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+
+/**
+ * Prova a defesa em profundidade (camada 2). Aqui a allowlist inclui de propósito hosts que
+ * resolvem para endereços internos — isto é, a camada 1 (allowlist) os deixaria passar. O
+ * teste mostra que a checagem de endereço interno os barra mesmo assim, sem nenhuma
+ * requisição de rede (o bloqueio ocorre antes do fetch).
+ */
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(properties = "ssrf.allowlist=127.0.0.1,169.254.169.254,10.0.0.5")
+class SsrfDefesaIpTest {
+
+    @Autowired private MockMvc mvc;
+
+    @Test
+    void corrigidoBloqueiaLoopbackAindaQueNaAllowlist() throws Exception {
+        mvc.perform(get("/a10/ssrf/corrigido").param("url", "http://127.0.0.1:9/x"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void corrigidoBloqueiaIpDeMetadadosDeNuvemAindaQueNaAllowlist() throws Exception {
+        // 169.254.169.254 é o endpoint de metadados de AWS/GCP/Azure — link-local.
+        mvc.perform(get("/a10/ssrf/corrigido").param("url", "http://169.254.169.254/latest/meta-data/"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void corrigidoBloqueiaIpPrivadoAindaQueNaAllowlist() throws Exception {
+        mvc.perform(get("/a10/ssrf/corrigido").param("url", "http://10.0.0.5/admin"))
+                .andExpect(status().isBadRequest());
+    }
+}

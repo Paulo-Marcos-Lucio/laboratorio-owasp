@@ -7,6 +7,19 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 
 ### Adicionado
 
+- A10 SSRF (CWE-918): par vulnerável/corrigido em `a10ssrf`. O `/vulneravel` busca
+  qualquer URL recebida do usuário, então `?url=http://127.0.0.1:.../interno` ou
+  `?url=http://169.254.169.254/...` faz o servidor alcançar serviços internos e o endpoint
+  de metadados de nuvem. O `/corrigido` aplica duas camadas: allowlist de host + só
+  esquemas `http`/`https`; e, como defesa em profundidade, resolve o host e recusa qualquer
+  endereço interno (loopback, `0.0.0.0`, link-local 169.254/16, privado 10/8, 172.16/12,
+  192.168/16, multicast e unique-local IPv6 fc00::/7).
+- `SsrfTest` + `SsrfDefesaIpTest` + `SsrfAllowlistTest` + `SsrfValidacaoTest` (10 casos):
+  o exploit sobe um servidor HTTP de loopback (sem rede externa) e o lado vulnerável vaza
+  o segredo interno; o corrigido bloqueia loopback, host fora da allowlist e esquema não
+  http; a camada de IP barra loopback/metadados/privado mesmo quando o host está na
+  allowlist; um host permitido com endereço público é aceito (sem falso positivo); e a
+  classificação de endereço interno é testada nos dois sentidos.
 - A03 Command Injection (CWE-78): par vulnerável/corrigido em `a03cmd`. O
   `/vulneravel` concatena o host recebido numa linha de comando e a entrega a um shell
   (`sh -c` / `cmd /c`), então `127.0.0.1 && echo INJETADO` roda um segundo comando; o

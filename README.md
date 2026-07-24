@@ -45,6 +45,7 @@ Se os testes passam, a demonstração é honesta: a falha é real e a correção
 | **A01** | Path Traversal (CWE-22) | [`a01path`](src/main/java/br/com/paulomarcos/labowasp/a01path) | [`ArquivoServiceTest`](src/test/java/br/com/paulomarcos/labowasp/ArquivoServiceTest.java) |
 | **A01** | Open Redirect (CWE-601) | [`a01redirect`](src/main/java/br/com/paulomarcos/labowasp/a01redirect) | [`OpenRedirectTest`](src/test/java/br/com/paulomarcos/labowasp/OpenRedirectTest.java) |
 | **A02** | Hash de senha fraco: MD5 → BCrypt (CWE-916) | [`a02crypto`](src/main/java/br/com/paulomarcos/labowasp/a02crypto) | [`HashSenhaTest`](src/test/java/br/com/paulomarcos/labowasp/HashSenhaTest.java) |
+| **A10** | SSRF (CWE-918) | [`a10ssrf`](src/main/java/br/com/paulomarcos/labowasp/a10ssrf) | [`SsrfTest`](src/test/java/br/com/paulomarcos/labowasp/SsrfTest.java) |
 
 ---
 
@@ -79,6 +80,10 @@ curl -i -H "X-Usuario: bob" http://localhost:8080/a01/idor/corrigido/1
 # A01 — Open Redirect: destino externo redireciona (vulnerável) vs. 400 (corrigido)
 curl -i "http://localhost:8080/a01/redirect/vulneravel?destino=https://site-falso.example"
 curl -i "http://localhost:8080/a01/redirect/corrigido?destino=https://site-falso.example"
+
+# A10 — SSRF: o servidor busca o IP de metadados de nuvem (vulnerável) vs. 400 (corrigido)
+curl "http://localhost:8080/a10/ssrf/vulneravel?url=http://169.254.169.254/latest/meta-data/"
+curl -i "http://localhost:8080/a10/ssrf/corrigido?url=http://169.254.169.254/latest/meta-data/"
 ```
 
 ### Rodando os testes (a prova)
@@ -99,10 +104,11 @@ src/main/java/.../labowasp/
 ├── a02crypto/  Hash de senha — MD5 (errado) vs BCrypt (certo)
 ├── a03cmd/     Command Injection — shell com entrada concatenada vs allowlist sem shell
 ├── a03sqli/    SQL Injection — concatenação vs consulta parametrizada
-└── a03xss/     XSS — reflexão crua vs codificação de saída
+├── a03xss/     XSS — reflexão crua vs codificação de saída
+└── a10ssrf/    SSRF — busca de URL arbitrária vs allowlist de host + bloqueio de IP interno
 ```
 
-Cada correção aplica **o princípio certo**, não um remendo: parametrização de consulta, codificação de saída, autorização baseada em propriedade, confinamento de caminho, redirect restrito a destinos internos, validação por allowlist sem passar entrada a um shell e hashing lento com sal.
+Cada correção aplica **o princípio certo**, não um remendo: parametrização de consulta, codificação de saída, autorização baseada em propriedade, confinamento de caminho, redirect restrito a destinos internos, validação por allowlist sem passar entrada a um shell, allowlist de host com bloqueio de endereço interno (loopback/privado/metadados) e hashing lento com sal.
 
 ---
 
