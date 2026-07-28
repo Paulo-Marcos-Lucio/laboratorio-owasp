@@ -1,3 +1,5 @@
+<a href="https://paulo-marcos-lucio.github.io"><img src="https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/banner-abismo.svg" alt="Laboratório OWASP — a cultura que pulsa no laboratório submerso: OWASP Top 10 hands-on (vulnerável, exploit, corrigido)" width="100%"/></a>
+
 <div align="center">
 
 # 🧪 Laboratório OWASP
@@ -91,6 +93,25 @@ curl -i "http://localhost:8080/a10/ssrf/corrigido?url=http://169.254.169.254/lat
 ```bash
 mvn test
 ```
+
+---
+
+## 🔓 Versão Pro (privada) — mentoria e cenários avançados
+
+Este laboratório é aberto — a **vitrine** do método "vulnerável → exploit → corrigido". A **versão Pro é privada**: **cenários avançados** e uma **trilha de mentoria guiada** (AppSec para times de dev) — o conteúdo que sustenta treinamento e consultoria.
+
+- 🧭 Trilha guiada do exploit à correção, no **seu** stack;
+- 👥 Treinamento hands-on para o seu time de desenvolvimento;
+- 🏗️ Do laboratório à sua base de código real.
+
+> **Quer subir a régua de segurança do seu time de dev?** Eu treino com código executável, não com slide.
+
+<div align="center">
+
+[![Pacotes e valores](https://img.shields.io/badge/Pacotes_e_valores-paulo--marcos--lucio.github.io-0f766e?style=for-the-badge)](https://paulo-marcos-lucio.github.io)
+[![Falar no LinkedIn](https://img.shields.io/badge/LinkedIn-Falar_agora-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paulo-marcos-a07379174/)
+
+</div>
 
 ---
 

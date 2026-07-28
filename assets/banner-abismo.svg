@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 300" role="img" aria-label="Laboratório OWASP — cultura bioluminescente">
+      <defs>
+        <radialGradient id="la-bg" cx="0.15" cy="0.5" r="1"><stop offset="0" stop-color="#22072a"/><stop offset="1" stop-color="#0a0410"/></radialGradient>
+        <radialGradient id="la-glow" cx="0.5" cy="0.55" r="0.5"><stop offset="0" stop-color="#ff4fa3" stop-opacity=".5"/><stop offset="1" stop-color="#ff4fa3" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="1280" height="300" fill="url(#la-bg)"/>
+      <g fill="none" stroke="#ff4fa3" stroke-linecap="round" stroke-linejoin="round">
+        <g stroke-opacity=".13" stroke-width="2"><path d="M600 276 H1150"/><path d="M812 276 V214 Q812 202 824 202 H1002"/><path d="M690 30 H1040"/><path d="M1176 66 V236"/></g>
+        <g stroke-opacity=".4"><circle cx="600" cy="276" r="6" fill="#ff4fa3" fill-opacity=".3"/><circle cx="690" cy="30" r="4" fill="#ff4fa3" fill-opacity=".3"/><rect x="994" y="186" width="16" height="16" rx="2" fill="#ff4fa3" fill-opacity=".22"/><path d="M1150 276 h30 m-9 -6 l13 6 -13 6"/></g>
+        <g stroke="#ffd2e7" stroke-width="2.4" stroke-opacity=".9" stroke-dasharray="9 620">
+          <path d="M600 276 H1150"><animate attributeName="stroke-dashoffset" values="629;0" dur="3.3s" repeatCount="indefinite"/></path>
+          <path d="M812 276 V214 Q812 202 824 202 H1002"><animate attributeName="stroke-dashoffset" values="629;0" dur="4.3s" begin="-1.4s" repeatCount="indefinite"/></path>
+          <path d="M690 30 H1040"><animate attributeName="stroke-dashoffset" values="629;0" dur="3.7s" begin="-0.9s" repeatCount="indefinite"/></path>
+          <path d="M1176 66 V236"><animate attributeName="stroke-dashoffset" values="629;0" dur="3s" begin="-2.1s" repeatCount="indefinite"/></path>
+        </g>
+        <circle r="3.5" fill="#ffd2e7"><animateMotion path="M600 276 H1150" dur="3.3s" repeatCount="indefinite"/></circle>
+      </g>
+      <g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="13" fill="#ff4fa3">
+        <text x="520" opacity=".15">1<tspan x="520" dy="17">0</tspan><tspan x="520" dy="17">1</tspan><animateTransform attributeName="transform" type="translate" values="0,-60;0,320" dur="7.5s" begin="-2s" repeatCount="indefinite"/></text>
+        <text x="760" opacity=".12">01<tspan x="760" dy="17">1</tspan><tspan x="760" dy="17">0</tspan><animateTransform attributeName="transform" type="translate" values="0,-80;0,320" dur="9s" repeatCount="indefinite"/></text>
+        <text x="1000" opacity=".13">0<tspan x="1000" dy="17">1</tspan><tspan x="1000" dy="17">0</tspan><animateTransform attributeName="transform" type="translate" values="0,-40;0,320" dur="6.5s" begin="-3s" repeatCount="indefinite"/></text>
+      </g>
+      <g transform="translate(190,150)">
+        <circle r="126" fill="url(#la-glow)"><animate attributeName="opacity" values=".5;1;.5" dur="2.8s" repeatCount="indefinite"/></circle>
+        <path d="M-24 -74 H24 M-18 -74 V-26 L-50 46 A18 18 0 0 0 -33 72 H33 A18 18 0 0 0 50 46 L18 -26 V-74" fill="#2a0a1c" stroke="#ff7ac2" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M-40 22 H40 L50 46 A18 18 0 0 1 33 72 H-33 A18 18 0 0 1 -50 46 Z" fill="#ff4fa3" fill-opacity=".3"><animate attributeName="fill-opacity" values=".2;.42;.2" dur="2.8s" repeatCount="indefinite"/></path>
+        <g fill="#ffc2e0">
+          <circle cx="-16" cy="46" r="5"><animate attributeName="cy" values="56;6;56" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle cx="12" cy="40" r="4"><animate attributeName="cy" values="54;2;54" dur="3.3s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="3.3s" repeatCount="indefinite"/></circle>
+          <circle cx="0" cy="50" r="3.5"><animate attributeName="cy" values="56;16;56" dur="2.1s" repeatCount="indefinite"/></circle>
+          <circle cx="24" cy="52" r="3"><animate attributeName="cy" values="58;20;58" dur="2.9s" begin="-1s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="2.9s" repeatCount="indefinite"/></circle>
+        </g>
+      </g>
+      <text x="410" y="118" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" letter-spacing="5" fill="#ff8fc4" opacity=".9">LABORATÓRIO DE VULNERABILIDADES · OWASP</text>
+      <text x="408" y="186" font-family="Segoe UI,system-ui,sans-serif" font-weight="800" font-size="60" letter-spacing="-1" fill="#ffe7f3">Laboratório</text>
+      <text x="412" y="228" font-family="Segoe UI,system-ui,sans-serif" font-size="21" fill="#eaa8cd">Onde a falha é de propósito — pra você aprender a defender.</text>
+      <g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="13" fill="#e6a0c6">
+        <rect x="412" y="246" width="116" height="26" rx="13" fill="none" stroke="#ff4fa3" stroke-opacity=".4"/><text x="426" y="263">OWASP Top 10</text>
+        <rect x="536" y="246" width="66" height="26" rx="13" fill="none" stroke="#ff4fa3" stroke-opacity=".4"/><text x="550" y="263">Java</text>
+        <rect x="610" y="246" width="104" height="26" rx="13" fill="none" stroke="#ff4fa3" stroke-opacity=".4"/><text x="624" y="263">hands-on</text>
+      </g>
+      <g transform="translate(1092,44)"><rect width="150" height="34" rx="17" fill="#280a1c" stroke="#f5c451" stroke-opacity=".55"/><path d="M22 17a5 5 0 0 1 10 0v4M20 21h14v11H20z" fill="none" stroke="#f5c451" stroke-width="1.5"/><text x="44" y="23" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="13" letter-spacing="1" fill="#f3d488">PRO · privado</text></g>
+    </svg>
