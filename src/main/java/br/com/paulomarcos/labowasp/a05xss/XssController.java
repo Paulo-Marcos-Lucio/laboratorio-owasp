@@ -1,4 +1,4 @@
-package br.com.paulomarcos.labowasp.a03xss;
+package br.com.paulomarcos.labowasp.a05xss;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
 
 /**
- * A03:2021 Injection — Cross-Site Scripting refletido (CWE-79).
+ * A05:2025 Injection — Cross-Site Scripting refletido (CWE-79).
  *
- * <p>O {@code /vulneravel} devolve a entrada dentro do HTML sem codificar: um
- * {@code <script>} enviado pelo usuário executa no navegador da vítima. O
- * {@code /corrigido} aplica codificação de entidades HTML na saída.
+ * <p>O {@code /vulneravel} devolve a entrada dentro do HTML sem codificar: um {@code <script>}
+ * enviado pelo usuário executa no navegador da vítima. O {@code /corrigido} aplica codificação de
+ * entidades HTML na saída.
  */
 @RestController
-@RequestMapping("/a03/xss")
+@RequestMapping("/a05/xss")
 public class XssController {
 
     @GetMapping(value = "/vulneravel", produces = MediaType.TEXT_HTML_VALUE)

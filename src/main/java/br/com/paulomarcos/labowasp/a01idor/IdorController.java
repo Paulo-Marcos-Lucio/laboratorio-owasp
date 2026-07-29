@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * A01:2021 Broken Access Control — IDOR (CWE-639).
+ * A01:2025 Broken Access Control — IDOR (CWE-639).
  *
- * <p>O {@code /vulneravel} devolve qualquer nota pelo id, sem verificar se ela
- * pertence a quem pede — trocar o id no navegador dá acesso a dados alheios. O
- * {@code /corrigido} valida a propriedade antes de responder.
+ * <p>O {@code /vulneravel} devolve qualquer nota pelo id, sem verificar se ela pertence a quem pede
+ * — trocar o id no navegador dá acesso a dados alheios. O {@code /corrigido} valida a propriedade
+ * antes de responder.
  */
 @RestController
 @RequestMapping("/a01/idor")
 public class IdorController {
 
-    private final Map<Long, Nota> notas = Map.of(
-            1L, new Nota(1L, "alice", "Dados bancarios da Alice"),
-            2L, new Nota(2L, "bob", "Anotacoes do Bob"));
+    private final Map<Long, Nota> notas =
+            Map.of(
+                    1L, new Nota(1L, "alice", "Dados bancarios da Alice"),
+                    2L, new Nota(2L, "bob", "Anotacoes do Bob"));
 
     @GetMapping("/vulneravel/{id}")
     public ResponseEntity<Nota> vulneravel(

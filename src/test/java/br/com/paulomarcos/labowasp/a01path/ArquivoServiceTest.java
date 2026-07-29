@@ -1,10 +1,9 @@
-package br.com.paulomarcos.labowasp;
+package br.com.paulomarcos.labowasp.a01path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import br.com.paulomarcos.labowasp.a01path.ArquivoService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
@@ -50,7 +49,8 @@ class ArquivoServiceTest {
         Files.writeString(base.resolve("catalogo.txt"), "conteudo ok");
 
         Path cwd = Path.of("").toAbsolutePath();
-        assumeTrue(base.getRoot() != null && base.getRoot().equals(cwd.getRoot()),
+        assumeTrue(
+                base.getRoot() != null && base.getRoot().equals(cwd.getRoot()),
                 "base e CWD em roots diferentes — cenário de caminho relativo não se aplica");
         Path baseRelativa = cwd.relativize(base);
         assumeTrue(baseRelativa.startsWith(".."), "não gerou base relativa com '..' inicial");

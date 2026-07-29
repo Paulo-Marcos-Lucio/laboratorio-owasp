@@ -7,7 +7,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <!--
+          3.3.4 (set/2024) trazia spring-security-crypto 6.3.3, afetado pela CVE-2025-22228:
+          BCryptPasswordEncoder.matches() devolvia true para uma senha ERRADA sempre que os
+          72 primeiros bytes coincidiam. Isso quebrava justamente o lado "corrigido" da licao
+          de senha. A partir de 6.3.8/6.4.4 a CVE esta fechada; esta linha (3.5.x) traz 6.5.x,
+          que recusa a senha longa no encode. Ver HashSenhaTest.
+        -->
+        <version>3.5.7</version>
         <relativePath/>
     </parent>
 
@@ -15,7 +22,7 @@
     <artifactId>laboratorio-owasp</artifactId>
     <version>0.1.0</version>
     <name>laboratorio-owasp</name>
-    <description>Laboratorio didatico OWASP Top 10 — vulneravel, exploit e corrigido, em Spring Boot.</description>
+    <description>Laboratorio didatico com 8 vulnerabilidades em 3 das 10 categorias do OWASP Top 10:2025 (A01, A04, A05) — vulneravel, exploit e corrigido, em Spring Boot.</description>
 
     <properties>
         <java.version>21</java.version>
@@ -52,6 +59,47 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!--
+              O unico portao de estilo do repo. Os 4 repos Python da suite gateiam
+              ruff check, ruff format e mypy em modo estrito; este era o unico sem nada,
+              e a deriva ja tinha acontecido (duas convencoes de @Autowired, 4 linhas
+              acima de 100 colunas).
+              `mvn verify` reprova o build se a formatacao sair do padrao;
+              `mvn spotless:apply` conserta.
+            -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.46.1</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <style>AOSP</style>
+                        </googleJavaFormat>
+                        <removeUnusedImports/>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!--
+                      Desliga o cache de DNS da JVM (padrao ~30s). Sem isso o
+                      SsrfLimiteRebindingTest nao consegue demonstrar o DNS rebinding
+                      dentro de uma unica requisicao: a segunda resolucao viria do cache.
+                      Nenhum teste faz DNS de verdade, entao o custo e zero.
+                    -->
+                    <argLine>-Dsun.net.inetaddr.ttl=0</argLine>
+                </configuration>
             </plugin>
         </plugins>
     </build>

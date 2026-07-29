@@ -4,15 +4,15 @@
 
 # 🧪 Laboratório OWASP
 
-### Cada vulnerabilidade do OWASP Top 10 em **três atos**: vulnerável → exploit → corrigido.
+### 8 vulnerabilidades do OWASP Top 10:2025 em **três atos**: vulnerável → exploit → corrigido.
 
-*Uma aplicação **Spring Boot** onde cada falha vive em dois endpoints — `/vulneravel` e `/corrigido` — e um **teste automatizado prova** que o exploit funciona na versão vulnerável e é bloqueado na corrigida. É o "diagnóstico e correção" em código executável, no stack Java.*
+*Uma aplicação **Spring Boot** onde a maioria das falhas vive em dois endpoints — `/vulneravel` e `/corrigido` — e um **teste automatizado prova** que o exploit funciona na versão vulnerável e é bloqueado na corrigida. É o "diagnóstico e correção" em código executável, no stack Java.*
 
 [![CI](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml/badge.svg)](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml)
 [![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![OWASP Top 10](https://img.shields.io/badge/OWASP-Top_10-000000.svg)](https://owasp.org/Top10/)
+[![OWASP Top 10 2025: 3 de 10](https://img.shields.io/badge/OWASP_Top_10_2025-3_de_10_categorias-000000.svg)](https://owasp.org/Top10/)
 
 </div>
 
@@ -20,7 +20,11 @@
 
 ## ⚠️ Aviso
 
-Esta aplicação contém vulnerabilidades **de propósito**, para fins educativos. **Não a exponha na internet.** Rode localmente.
+Esta aplicação contém vulnerabilidades **de propósito**, para fins educativos.
+
+A aplicação **só escuta em `127.0.0.1`** (`server.address` em `application.properties`, com teste de regressão em [`ConfiguracaoDeRedeTest`](src/test/java/br/com/paulomarcos/labowasp/ConfiguracaoDeRedeTest.java)). **Não altere isso e não publique a porta 8080 em contêiner** — use `-p 127.0.0.1:8080:8080`, nunca `-p 8080:8080`. O motivo é concreto: `/a05/cmd/vulneravel` executa comandos arbitrários do sistema operacional, sem autenticação. Com o padrão do Spring Boot (`0.0.0.0`), qualquer máquina do mesmo Wi‑Fi — coworking, faculdade, café — ou da sua VPN de malha executaria comandos no seu computador.
+
+O uso das técnicas de exploração fora deste laboratório, em sistema de terceiro sem autorização por escrito, é crime no Brasil (Lei 12.737/2012, com as penas ampliadas pela Lei 14.155/2021).
 
 ---
 
@@ -32,66 +36,108 @@ Ler sobre uma vulnerabilidade é uma coisa; **ver o exploit passar** e depois **
 - `…/corrigido` — a mesma funcionalidade, feita com segurança.
 - um **teste** que dispara o exploit real e afirma o comportamento dos dois lados.
 
-Se os testes passam, a demonstração é honesta: a falha é real e a correção funciona.
+Seis dos oito pares são expostos por **endpoint HTTP**. Os outros dois — Path Traversal (`a01path`) e hash de senha (`a04crypto`) — são pares de **biblioteca**: uma classe com os dois métodos, exercitada direto pelo teste, sem rota HTTP. Estão marcados como *(sem endpoint)* na tabela.
+
+Se os testes passam, a demonstração é honesta: a falha é real e a correção funciona. Dois testes fazem o contrário e **documentam limites** do que está implementado — `SsrfLimiteRebindingTest` e `HashSenhaTest#bcryptSoConsideraOs72PrimeirosBytes`. Um laboratório que esconde o limite do próprio controle ensina errado.
 
 ---
 
 ## 🗂️ As vulnerabilidades
 
-| OWASP | Vulnerabilidade | Onde | Teste que prova |
+| OWASP 2025 | Vulnerabilidade | Onde | Teste que prova |
 | --- | --- | --- | --- |
-| **A03** | SQL Injection (CWE-89) | [`a03sqli`](src/main/java/br/com/paulomarcos/labowasp/a03sqli) | [`SqlInjectionTest`](src/test/java/br/com/paulomarcos/labowasp/SqlInjectionTest.java) |
-| **A03** | XSS refletido (CWE-79) | [`a03xss`](src/main/java/br/com/paulomarcos/labowasp/a03xss) | [`XssTest`](src/test/java/br/com/paulomarcos/labowasp/XssTest.java) |
-| **A03** | Command Injection (CWE-78) | [`a03cmd`](src/main/java/br/com/paulomarcos/labowasp/a03cmd) | [`CommandInjectionTest`](src/test/java/br/com/paulomarcos/labowasp/CommandInjectionTest.java) |
-| **A01** | IDOR — Broken Access Control (CWE-639) | [`a01idor`](src/main/java/br/com/paulomarcos/labowasp/a01idor) | [`IdorTest`](src/test/java/br/com/paulomarcos/labowasp/IdorTest.java) |
-| **A01** | Path Traversal (CWE-22) | [`a01path`](src/main/java/br/com/paulomarcos/labowasp/a01path) | [`ArquivoServiceTest`](src/test/java/br/com/paulomarcos/labowasp/ArquivoServiceTest.java) |
-| **A01** | Open Redirect (CWE-601) | [`a01redirect`](src/main/java/br/com/paulomarcos/labowasp/a01redirect) | [`OpenRedirectTest`](src/test/java/br/com/paulomarcos/labowasp/OpenRedirectTest.java) |
-| **A02** | Hash de senha fraco: MD5 → BCrypt (CWE-916) | [`a02crypto`](src/main/java/br/com/paulomarcos/labowasp/a02crypto) | [`HashSenhaTest`](src/test/java/br/com/paulomarcos/labowasp/HashSenhaTest.java) |
-| **A10** | SSRF (CWE-918) | [`a10ssrf`](src/main/java/br/com/paulomarcos/labowasp/a10ssrf) | [`SsrfTest`](src/test/java/br/com/paulomarcos/labowasp/SsrfTest.java) |
+| **A05** | SQL Injection (CWE-89) | [`a05sqli`](src/main/java/br/com/paulomarcos/labowasp/a05sqli) | [`SqlInjectionTest`](src/test/java/br/com/paulomarcos/labowasp/a05sqli/SqlInjectionTest.java) |
+| **A05** | XSS refletido (CWE-79) | [`a05xss`](src/main/java/br/com/paulomarcos/labowasp/a05xss) | [`XssTest`](src/test/java/br/com/paulomarcos/labowasp/a05xss/XssTest.java) |
+| **A05** | Command Injection (CWE-78) | [`a05cmd`](src/main/java/br/com/paulomarcos/labowasp/a05cmd) | [`CommandInjectionTest`](src/test/java/br/com/paulomarcos/labowasp/a05cmd/CommandInjectionTest.java) |
+| **A01** | IDOR — Broken Access Control (CWE-639) | [`a01idor`](src/main/java/br/com/paulomarcos/labowasp/a01idor) | [`IdorTest`](src/test/java/br/com/paulomarcos/labowasp/a01idor/IdorTest.java) |
+| **A01** | Path Traversal (CWE-22) *(sem endpoint)* | [`a01path`](src/main/java/br/com/paulomarcos/labowasp/a01path) | [`ArquivoServiceTest`](src/test/java/br/com/paulomarcos/labowasp/a01path/ArquivoServiceTest.java) |
+| **A01** | Open Redirect (CWE-601) | [`a01redirect`](src/main/java/br/com/paulomarcos/labowasp/a01redirect) | [`OpenRedirectTest`](src/test/java/br/com/paulomarcos/labowasp/a01redirect/OpenRedirectTest.java) |
+| **A01** | SSRF (CWE-918) | [`a01ssrf`](src/main/java/br/com/paulomarcos/labowasp/a01ssrf) | [`SsrfTest`](src/test/java/br/com/paulomarcos/labowasp/a01ssrf/SsrfTest.java) |
+| **A04** | Hash de senha fraco: MD5 → BCrypt (CWE-916) *(sem endpoint)* | [`a04crypto`](src/main/java/br/com/paulomarcos/labowasp/a04crypto) | [`HashSenhaTest`](src/test/java/br/com/paulomarcos/labowasp/a04crypto/HashSenhaTest.java) |
+
+**Cobertura: 3 das 10 categorias do OWASP Top 10:2025** (A01, A04, A05). A02, A03, A06, A07, A08, A09 e A10 ainda não têm par — contribuições são bem-vindas (ver [CONTRIBUTING](CONTRIBUTING.md)).
+
+> Os códigos são da edição **2025**. Se você conhece a lista de 2021, a tradução é: SQLi/XSS/Command Injection saíram de A03 para **A05**, hash de senha saiu de A02 para **A04** e o SSRF (A10:2021) foi absorvido por **A01**. Os nomes de pacote seguem o código atual.
 
 ---
 
 ## 🚀 Rodando
 
-Requer **Java 21+**. (Ou use Docker: `docker run --rm -v "$PWD":/app -w /app maven:3.9-eclipse-temurin-21 mvn test`.)
+Requer **Java 21+**. Não há pacote publicado: clone e rode o wrapper.
 
 ```bash
-./mvnw spring-boot:run     # ou: mvn spring-boot:run
+git clone https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp.git
+cd laboratorio-owasp
+./mvnw spring-boot:run     # sobe em http://127.0.0.1:8080 (só loopback)
+```
+
+Só os testes, sem subir nada — inclusive em Docker:
+
+```bash
+docker run --rm -v "$PWD":/app -w /app maven:3.9-eclipse-temurin-21 mvn verify
 ```
 
 ### Veja o exploit e a correção lado a lado
 
+Os payloads têm espaço, aspas e `<`. Copiá-los direto na URL faz o curl recusar (`curl: (3) URL rejected`) e o Tomcat devolver 400 antes de o controlador ver a requisição. Por isso todo exemplo usa `curl -G --data-urlencode`, que codifica o parâmetro para você.
+
 ```bash
-# A03 — SQL Injection: o payload retorna a tabela inteira...
-curl "http://localhost:8080/a03/sqli/vulneravel?nome=Notebook' OR '1'='1"
+# A05 — SQL Injection: o payload retorna a tabela inteira...
+curl -sG --data-urlencode "nome=Notebook' OR '1'='1" http://localhost:8080/a05/sqli/vulneravel
+# → [{"ID":1,"NOME":"Notebook",...},{"ID":2,"NOME":"Mouse",...},{"ID":3,...}]
 # ...e a versão parametrizada retorna vazio:
-curl "http://localhost:8080/a03/sqli/corrigido?nome=Notebook' OR '1'='1"
+curl -sG --data-urlencode "nome=Notebook' OR '1'='1" http://localhost:8080/a05/sqli/corrigido
+# → []
 
-# A03 — XSS: o <script> volta cru (vulnerável) vs. escapado (corrigido)
-curl "http://localhost:8080/a03/xss/vulneravel?q=<script>alert(1)</script>"
-curl "http://localhost:8080/a03/xss/corrigido?q=<script>alert(1)</script>"
+# A05 — XSS: o <script> volta cru (vulnerável) vs. escapado (corrigido)
+curl -sG --data-urlencode "q=<script>alert(1)</script>" http://localhost:8080/a05/xss/vulneravel
+# → <p>Voce buscou: <script>alert(1)</script></p>
+curl -sG --data-urlencode "q=<script>alert(1)</script>" http://localhost:8080/a05/xss/corrigido
+# → <p>Voce buscou: &lt;script&gt;alert(1)&lt;/script&gt;</p>
 
-# A03 — Command Injection: o "&& echo" roda um 2º comando (vulnerável) vs. 400 (corrigido)
-curl "http://localhost:8080/a03/cmd/vulneravel?host=127.0.0.1 && echo INJETADO"
-curl -i "http://localhost:8080/a03/cmd/corrigido?host=127.0.0.1 && echo INJETADO"
+# A05 — Command Injection: o "&& echo" roda um 2º comando (vulnerável) vs. 400 (corrigido)
+curl -sG --data-urlencode "host=127.0.0.1 && echo INJETADO" http://localhost:8080/a05/cmd/vulneravel
+# → pong de 127.0.0.1
+#   INJETADO          <- numa linha própria: o comando rodou de verdade
+curl -isG --data-urlencode "host=127.0.0.1 && echo INJETADO" http://localhost:8080/a05/cmd/corrigido
+# → HTTP/1.1 400 ... host invalido
 
 # A01 — IDOR: bob lê a nota da alice (vulnerável) vs. 403 (corrigido)
-curl -H "X-Usuario: bob" http://localhost:8080/a01/idor/vulneravel/1
-curl -i -H "X-Usuario: bob" http://localhost:8080/a01/idor/corrigido/1
+curl -s -H "X-Usuario: bob" http://localhost:8080/a01/idor/vulneravel/1
+# → {"id":1,"dono":"alice","texto":"Dados bancarios da Alice"}
+curl -is -H "X-Usuario: bob" http://localhost:8080/a01/idor/corrigido/1
+# → HTTP/1.1 403
 
 # A01 — Open Redirect: destino externo redireciona (vulnerável) vs. 400 (corrigido)
-curl -i "http://localhost:8080/a01/redirect/vulneravel?destino=https://site-falso.example"
-curl -i "http://localhost:8080/a01/redirect/corrigido?destino=https://site-falso.example"
+curl -is "http://localhost:8080/a01/redirect/vulneravel?destino=https://site-falso.example"
+# → HTTP/1.1 302 / Location: https://site-falso.example
+curl -is "http://localhost:8080/a01/redirect/corrigido?destino=https://site-falso.example"
+# → HTTP/1.1 400
+curl -is "http://localhost:8080/a01/redirect/corrigido?destino=%2Fpainel"
+# → HTTP/1.1 302 / Location: /painel      <- o caso de uso legítimo continua funcionando
 
-# A10 — SSRF: o servidor busca o IP de metadados de nuvem (vulnerável) vs. 400 (corrigido)
-curl "http://localhost:8080/a10/ssrf/vulneravel?url=http://169.254.169.254/latest/meta-data/"
-curl -i "http://localhost:8080/a10/ssrf/corrigido?url=http://169.254.169.254/latest/meta-data/"
+# A01 — SSRF: o servidor busca uma URL escolhida por você.
+# Alvo reproduzível: outro endpoint deste mesmo laboratório, no loopback.
+curl -sG --data-urlencode "url=http://127.0.0.1:8080/a05/xss/corrigido?q=oi" \
+  http://localhost:8080/a01/ssrf/vulneravel
+# → <p>Voce buscou: oi</p>    <- o SERVIDOR fez a requisição por você
+curl -isG --data-urlencode "url=http://127.0.0.1:8080/a05/xss/corrigido?q=oi" \
+  http://localhost:8080/a01/ssrf/corrigido
+# → HTTP/1.1 400 ... host fora da allowlist
 ```
+
+O alvo clássico do SSRF é o endpoint de metadados de nuvem (`http://169.254.169.254/latest/meta-data/`), que entrega credenciais temporárias da instância. Ele **não serve de exemplo executável fora de uma nuvem**: o IP não responde, e o `/vulneravel` devolve `502 nao foi possivel buscar a URL: Network is unreachable`. Por isso o exemplo acima usa um alvo de loopback.
+
+No `/corrigido`, com a allowlist padrão, esse IP para na **camada 1** (`host fora da allowlist`). Quem barra pela **camada 2** — a checagem de endereço interno, que é a defesa de verdade contra um host autorizado que aponta para dentro — é o [`SsrfDefesaIpTest`](src/test/java/br/com/paulomarcos/labowasp/a01ssrf/SsrfDefesaIpTest.java), que coloca `169.254.169.254`, `127.0.0.1` e `10.0.0.5` **dentro** da allowlist de propósito e afirma a recusa com o motivo `destino interno bloqueado`.
+
+
 
 ### Rodando os testes (a prova)
 
 ```bash
-mvn test
+./mvnw verify     # testes + verificação de formatação (spotless)
+./mvnw test       # só os testes
+./mvnw spotless:apply   # conserta a formatação
 ```
 
 ---
@@ -117,25 +163,37 @@ Este laboratório é aberto — a **vitrine** do método "vulnerável → exploi
 
 ## 🏗️ Como está organizado
 
+O nome do pacote é o código do OWASP Top 10:2025. Cada pacote de teste espelha o de produção, então a lição inteira — vulnerável, corrigido e prova — fica na mesma pasta.
+
 ```
 src/main/java/.../labowasp/
-├── a01idor/    IDOR — verificação de propriedade do recurso
-├── a01path/    Path Traversal — normalização + confinamento ao diretório-base
+├── a01idor/     IDOR — verificação de propriedade do recurso
+├── a01path/     Path Traversal — normalização + confinamento ao diretório-base
 ├── a01redirect/ Open Redirect — só aceita caminho relativo ao próprio app
-├── a02crypto/  Hash de senha — MD5 (errado) vs BCrypt (certo)
-├── a03cmd/     Command Injection — shell com entrada concatenada vs allowlist sem shell
-├── a03sqli/    SQL Injection — concatenação vs consulta parametrizada
-├── a03xss/     XSS — reflexão crua vs codificação de saída
-└── a10ssrf/    SSRF — busca de URL arbitrária vs allowlist de host + bloqueio de IP interno
+├── a01ssrf/     SSRF — busca de URL arbitrária vs allowlist de host + bloqueio de IP interno
+├── a04crypto/   Hash de senha — MD5 (errado) vs BCrypt (certo)
+├── a05cmd/      Command Injection — shell com entrada concatenada vs allowlist sem shell
+├── a05sqli/     SQL Injection — concatenação vs consulta parametrizada
+└── a05xss/      XSS — reflexão crua vs codificação de saída
 ```
 
 Cada correção aplica **o princípio certo**, não um remendo: parametrização de consulta, codificação de saída, autorização baseada em propriedade, confinamento de caminho, redirect restrito a destinos internos, validação por allowlist sem passar entrada a um shell, allowlist de host com bloqueio de endereço interno (loopback/privado/metadados) e hashing lento com sal.
+
+### O que este laboratório NÃO faz
+
+Escrito aqui para ninguém descobrir depois:
+
+- **A allowlist de SSRF não impede DNS rebinding.** A validação e a busca resolvem o nome de forma independente (TOCTOU), e o endereço já validado é descartado. Está reproduzido em [`SsrfLimiteRebindingTest`](src/test/java/br/com/paulomarcos/labowasp/a01ssrf/SsrfLimiteRebindingTest.java), que vaza o segredo com HTTP 200. Contra configuração estática (split-horizon, allowlist mal configurada) a camada funciona — que é o escopo dela.
+- **O BCrypt só considera os 72 primeiros bytes da senha.** O encoder recusa senhas maiores (é a correção da CVE-2025-22228), mas verificar um hash antigo de 72 bytes ainda ignora o sufixo. Passphrase longa em produção exige pré-hash ou Argon2id/scrypt.
+- **Não há autenticação, sessão nem CSRF.** Não é um app de referência: é um conjunto de lições isoladas.
 
 ---
 
 ## ⚖️ Uso ético
 
-Material **didático e defensivo**. As técnicas de exploração servem para entender e corrigir a falha — use apenas neste laboratório ou em sistemas que você tem autorização para testar.
+Material **didático e defensivo**. As técnicas de exploração servem para entender e corrigir a falha — use apenas neste laboratório ou em sistema para o qual você tenha **autorização por escrito**, com escopo e janela definidos.
+
+No Brasil, invadir dispositivo informático alheio é crime (Lei 12.737/2012, com penas ampliadas pela Lei 14.155/2021); o Marco Civil da Internet (Lei 12.965/2014) e a LGPD (Lei 13.709/2018) também se aplicam ao que você fizer com os dados obtidos. Ver [SECURITY.md](SECURITY.md).
 
 ---
 

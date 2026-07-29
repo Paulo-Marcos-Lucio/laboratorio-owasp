@@ -1,4 +1,4 @@
-package br.com.paulomarcos.labowasp;
+package br.com.paulomarcos.labowasp.a01idor;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class IdorTest {
 
-    @Autowired
-    private MockMvc mvc;
+    @Autowired private MockMvc mvc;
 
     @Test
     void vulneravelVazaNotaDeOutroUsuario() throws Exception {

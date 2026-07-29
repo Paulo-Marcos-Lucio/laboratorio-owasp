@@ -8,18 +8,26 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
-    name: Build · Testes (JUnit)
+  qualidade:
+    name: Formatação · Testes (JUnit)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       # actions fixadas por SHA (a mesma prática que o Esteira exige).
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
         with:
           distribution: temurin
           java-version: "21"
           cache: maven
       - run: chmod +x ./mvnw
-      - name: Testes (exploit vs correção)
-        run: ./mvnw -B test
+      # `verify` engloba o `test` e ainda roda o spotless:check (formatação).
+      - name: Formatação e testes (exploit vs correção)
+        run: ./mvnw -B verify

@@ -1,4 +1,4 @@
-package br.com.paulomarcos.labowasp.a10ssrf;
+package br.com.paulomarcos.labowasp.a01ssrf;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,11 +12,10 @@ import org.springframework.stereotype.Component;
 /**
  * Faz uma requisição HTTP GET e devolve o corpo como texto.
  *
- * <p>Componente único usado tanto pelo endpoint vulnerável quanto pelo corrigido: a
- * diferença de segurança está em <b>o que</b> se deixa buscar (a validação no controlador),
- * não no mecanismo de busca. Não segue redirecionamentos ({@code Redirect.NEVER}) — um
- * redirect poderia levar um host permitido a apontar para a rede interna — e usa timeouts
- * curtos para o laboratório nunca travar.
+ * <p>Componente único usado tanto pelo endpoint vulnerável quanto pelo corrigido: a diferença de
+ * segurança está em <b>o que</b> se deixa buscar (a validação no controlador), não no mecanismo de
+ * busca. Não segue redirecionamentos ({@code Redirect.NEVER}) — um redirect poderia levar um host
+ * permitido a apontar para a rede interna — e usa timeouts curtos para o laboratório nunca travar.
  */
 @Component
 public class HttpBuscador {
@@ -34,7 +33,8 @@ public class HttpBuscador {
         HttpRequest requisicao =
                 HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(5)).GET().build();
         HttpResponse<String> resposta =
-                cliente.send(requisicao, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+                cliente.send(
+                        requisicao, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         String corpo = resposta.body();
         return corpo.length() > LIMITE_CORPO ? corpo.substring(0, LIMITE_CORPO) : corpo;
     }

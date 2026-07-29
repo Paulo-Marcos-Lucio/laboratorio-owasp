@@ -1,4 +1,4 @@
-package br.com.paulomarcos.labowasp.a03sqli;
+package br.com.paulomarcos.labowasp.a05sqli;
 
 import java.util.List;
 import java.util.Map;
@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * A03:2021 Injection — SQL Injection (CWE-89).
+ * A05:2025 Injection — SQL Injection (CWE-89).
  *
- * <p>O endpoint {@code /vulneravel} concatena a entrada do usuário direto na query;
- * uma entrada como {@code Notebook' OR '1'='1} retorna a tabela inteira. O
- * {@code /corrigido} usa consulta parametrizada, onde a entrada é sempre um valor,
- * nunca código SQL.
+ * <p>O endpoint {@code /vulneravel} concatena a entrada do usuário direto na query; uma entrada
+ * como {@code Notebook' OR '1'='1} retorna a tabela inteira. O {@code /corrigido} usa consulta
+ * parametrizada, onde a entrada é sempre um valor, nunca código SQL.
  */
 @RestController
-@RequestMapping("/a03/sqli")
+@RequestMapping("/a05/sqli")
 public class SqlInjectionController {
 
     private final JdbcTemplate jdbc;

@@ -1,4 +1,4 @@
-package br.com.paulomarcos.labowasp.a10ssrf;
+package br.com.paulomarcos.labowasp.a01ssrf;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,9 +8,9 @@ import java.net.UnknownHostException;
 import org.junit.jupiter.api.Test;
 
 /**
- * Testes de unidade da classificação de endereço interno, nos dois sentidos, sem Spring nem
- * rede. {@link InetAddress#getByName} sobre um literal de IP apenas o interpreta — não faz
- * DNS —, então nenhum destes toca a internet.
+ * Testes de unidade da classificação de endereço interno, nos dois sentidos, sem Spring nem rede.
+ * {@link InetAddress#getByName} sobre um literal de IP apenas o interpreta — não faz DNS —, então
+ * nenhum destes toca a internet.
  */
 class SsrfValidacaoTest {
 
