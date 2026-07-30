@@ -50,9 +50,10 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 - Cada classe de teste passou para o pacote espelhado do código que ela exercita
   (`a01idor`, `a01path`, `a01redirect`, `a01ssrf`, `a04crypto`, `a05cmd`, `a05sqli`,
   `a05xss`), deixando a lição inteira — vulnerável, corrigido e prova — na mesma pasta.
-- README honesto quanto à cobertura: 8 vulnerabilidades em **3 das 10** categorias de 2025,
-  com os dois pares sem endpoint HTTP marcados como tais, e uma seção
-  "O que este laboratório NÃO faz".
+- README honesto quanto à cobertura: **3 das 10** categorias de 2025 (A01, A04 e A05),
+  descritas por categoria em vez de um número frágil de vulnerabilidades, com **49 testes
+  verdes** provando exploit e correção, os dois pares sem endpoint HTTP marcados como tais,
+  e uma seção "O que este laboratório NÃO faz".
 - Os comandos `curl` do README foram reescritos com `curl -G --data-urlencode` e a saída
   esperada de cada um. Antes, 4 dos 6 exemplos falhavam quando copiados e colados (o curl
   recusava a URL com espaço; o Tomcat rejeitava `<` e `>` crus com 400).

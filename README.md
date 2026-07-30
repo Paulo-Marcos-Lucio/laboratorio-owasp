@@ -4,15 +4,16 @@
 
 # 🧪 Laboratório OWASP
 
-### 8 vulnerabilidades do OWASP Top 10:2025 em **três atos**: vulnerável → exploit → corrigido.
+### As categorias **A01, A04 e A05** do OWASP Top 10:2025, cada lição em **três atos**: vulnerável → exploit → corrigido.
 
-*Uma aplicação **Spring Boot** onde a maioria das falhas vive em dois endpoints — `/vulneravel` e `/corrigido` — e um **teste automatizado prova** que o exploit funciona na versão vulnerável e é bloqueado na corrigida. É o "diagnóstico e correção" em código executável, no stack Java.*
+*Uma aplicação **Spring Boot** onde a maioria das falhas vive em dois endpoints — `/vulneravel` e `/corrigido` — e um **teste automatizado prova** que o exploit funciona na versão vulnerável e é bloqueado na corrigida. São **49 testes verdes** ao todo. É o "diagnóstico e correção" em código executável, no stack Java.*
 
 [![CI](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml/badge.svg)](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml)
 [![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![OWASP Top 10 2025: 3 de 10](https://img.shields.io/badge/OWASP_Top_10_2025-3_de_10_categorias-000000.svg)](https://owasp.org/Top10/)
+[![Testes: 49 verdes](https://img.shields.io/badge/testes-49_verdes-2ea44f.svg)](#rodando-os-testes-a-prova)
 
 </div>
 
@@ -36,9 +37,9 @@ Ler sobre uma vulnerabilidade é uma coisa; **ver o exploit passar** e depois **
 - `…/corrigido` — a mesma funcionalidade, feita com segurança.
 - um **teste** que dispara o exploit real e afirma o comportamento dos dois lados.
 
-Seis dos oito pares são expostos por **endpoint HTTP**. Os outros dois — Path Traversal (`a01path`) e hash de senha (`a04crypto`) — são pares de **biblioteca**: uma classe com os dois métodos, exercitada direto pelo teste, sem rota HTTP. Estão marcados como *(sem endpoint)* na tabela.
+A maioria dos pares é exposta por **endpoint HTTP**. Dois — Path Traversal (`a01path`) e hash de senha (`a04crypto`) — são pares de **biblioteca**: uma classe com os dois métodos, exercitada direto pelo teste, sem rota HTTP. Estão marcados como *(sem endpoint)* na tabela.
 
-Se os testes passam, a demonstração é honesta: a falha é real e a correção funciona. Dois testes fazem o contrário e **documentam limites** do que está implementado — `SsrfLimiteRebindingTest` e `HashSenhaTest#bcryptSoConsideraOs72PrimeirosBytes`. Um laboratório que esconde o limite do próprio controle ensina errado.
+Se os testes passam, a demonstração é honesta: a falha é real e **a correção funciona de verdade** — a app **só escuta em `127.0.0.1`** (com teste que reprova o build se a linha sumir), o BCrypt do lado corrigido **recusa a senha errada** que o encoder vulnerável (CVE-2025-22228) autenticava, e o SSRF corrigido **barra o endereço interno** mesmo para um host que está na allowlist. E dois testes fazem o contrário: **documentam limites** do que está implementado — `SsrfLimiteRebindingTest` (a camada de IP **não** impede DNS rebinding — é TOCTOU) e `HashSenhaTest#bcryptSoConsideraOs72PrimeirosBytes`. Um laboratório que esconde o limite do próprio controle ensina errado.
 
 ---
 
@@ -55,7 +56,7 @@ Se os testes passam, a demonstração é honesta: a falha é real e a correção
 | **A01** | SSRF (CWE-918) | [`a01ssrf`](src/main/java/br/com/paulomarcos/labowasp/a01ssrf) | [`SsrfTest`](src/test/java/br/com/paulomarcos/labowasp/a01ssrf/SsrfTest.java) |
 | **A04** | Hash de senha fraco: MD5 → BCrypt (CWE-916) *(sem endpoint)* | [`a04crypto`](src/main/java/br/com/paulomarcos/labowasp/a04crypto) | [`HashSenhaTest`](src/test/java/br/com/paulomarcos/labowasp/a04crypto/HashSenhaTest.java) |
 
-**Cobertura: 3 das 10 categorias do OWASP Top 10:2025** (A01, A04, A05). A02, A03, A06, A07, A08, A09 e A10 ainda não têm par — contribuições são bem-vindas (ver [CONTRIBUTING](CONTRIBUTING.md)).
+**Cobertura: 3 das 10 categorias do OWASP Top 10:2025** (A01, A04, A05), com **49 testes verdes** provando exploit e correção. A02, A03, A06, A07, A08, A09 e A10 ainda não têm par — contribuições são bem-vindas (ver [CONTRIBUTING](CONTRIBUTING.md)).
 
 > Os códigos são da edição **2025**. Se você conhece a lista de 2021, a tradução é: SQLi/XSS/Command Injection saíram de A03 para **A05**, hash de senha saiu de A02 para **A04** e o SSRF (A10:2021) foi absorvido por **A01**. Os nomes de pacote seguem o código atual.
 
@@ -145,6 +146,8 @@ No `/corrigido`, com a allowlist padrão, esse IP para na **camada 1** (`host fo
 ## 🔓 Versão Pro (privada) — mentoria e cenários avançados
 
 Este laboratório é aberto — a **vitrine** do método "vulnerável → exploit → corrigido". A **versão Pro é privada**: **cenários avançados** e uma **trilha de mentoria guiada** (AppSec para times de dev) — o conteúdo que sustenta treinamento e consultoria.
+
+**Para deixar claro:** o Pro **não é um motor diferente** nem uma engine "mais forte". O código deste laboratório é o mesmo. O Pro é **serviço** — mentoria e treinamento hands-on no stack do seu time, levando este método à sua base de código real.
 
 - 🧭 Trilha guiada do exploit à correção, no **seu** stack;
 - 👥 Treinamento hands-on para o seu time de desenvolvimento;
