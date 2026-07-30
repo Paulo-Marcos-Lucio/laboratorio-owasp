@@ -6,7 +6,7 @@
 
 ### As categorias **A01, A04 e A05** do OWASP Top 10:2025, cada lição em **três atos**: vulnerável → exploit → corrigido.
 
-*Uma aplicação **Spring Boot** onde a maioria das falhas vive em dois endpoints — `/vulneravel` e `/corrigido` — e um **teste automatizado prova** que o exploit funciona na versão vulnerável e é bloqueado na corrigida. São **49 testes verdes** ao todo. É o "diagnóstico e correção" em código executável, no stack Java.*
+*Uma aplicação **Spring Boot** para **aprender AppSec com código que roda**, não com slide. Cada categoria do OWASP Top 10:2025 é um par de endpoints no mesmo controller — `/vulneravel` e `/corrigido`: a requisição entra, cai num dos dois lados e volta como JSON, HTML ou status HTTP. Um **teste automatizado ancora cada lado** — dispara o exploit real, confirma que ele passa no vulnerável e é barrado no corrigido. São **49 testes verdes** ao todo: o "diagnóstico e correção" em código executável, no stack Java.*
 
 [![CI](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml/badge.svg)](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml)
 [![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
@@ -143,17 +143,18 @@ No `/corrigido`, com a allowlist padrão, esse IP para na **camada 1** (`host fo
 
 ---
 
-## 🔓 Versão Pro (privada) — mentoria e cenários avançados
+## 🔓 Versão Pro (privada)
 
-Este laboratório é aberto — a **vitrine** do método "vulnerável → exploit → corrigido". A **versão Pro é privada**: **cenários avançados** e uma **trilha de mentoria guiada** (AppSec para times de dev) — o conteúdo que sustenta treinamento e consultoria.
+Este laboratório é aberto — é a **vitrine** do método "vulnerável → exploit → corrigido". Aqui o Pro **não é um motor diferente** nem uma engine "mais forte": o código é este mesmo. O Pro é **serviço** — trabalho humano que leva este método à base de código real do seu time.
 
-**Para deixar claro:** o Pro **não é um motor diferente** nem uma engine "mais forte". O código deste laboratório é o mesmo. O Pro é **serviço** — mentoria e treinamento hands-on no stack do seu time, levando este método à sua base de código real.
-
-- 🧭 Trilha guiada do exploit à correção, no **seu** stack;
-- 👥 Treinamento hands-on para o seu time de desenvolvimento;
-- 🏗️ Do laboratório à sua base de código real.
-
-> **Quer subir a régua de segurança do seu time de dev?** Eu treino com código executável, não com slide.
+| | Ferramenta pública (você roda) | Pro / serviço (eu conduzo com você) |
+| --- | --- | --- |
+| **O que é** | Este laboratório, aberto e completo | Mentoria e treinamento hands-on, ao vivo |
+| **Engine** | 8 pares `vulneravel`/`corrigido`, 49 testes verdes | **A mesma** — o código é este; o Pro é trabalho humano |
+| **Onde roda** | No lab, em loopback e alvos sintéticos | Na **sua** base de código real |
+| **Método** | Você lê o par e o teste no seu ritmo | Trilha guiada do exploit à correção, junto do time |
+| **Cobertura** | 3 das 10 categorias (A01, A04, A05) | Cenários avançados sob medida para o seu stack |
+| **Entrega** | Autoestudo pelo README e pelos testes | Treinamento do time de dev com código executável, não slide |
 
 <div align="center">
 
@@ -164,7 +165,30 @@ Este laboratório é aberto — a **vitrine** do método "vulnerável → exploi
 
 ---
 
-## 🏗️ Como está organizado
+## 🏗️ Arquitetura
+
+O fluxo é o mesmo em toda categoria: a requisição entra pelo **Spring Boot** (que só escuta em `127.0.0.1`), cai no **controller da categoria** — lado `/vulneravel` ou `/corrigido` — e volta como **JSON, HTML ou status HTTP**. Um **teste JUnit** ancora os dois lados: dispara o exploit real e exige que ele passe no vulnerável e seja barrado no corrigido, com `mvn verify` reprovando o build se algum lado sair do script. Dois pares — `a01path` e `a04crypto` — pulam o HTTP e são exercitados direto pelo teste (*sem endpoint*).
+
+```mermaid
+flowchart LR
+    REQ["requisição HTTP · curl -G --data-urlencode"] --> ENG
+    ENG["Spring Boot · escuta só em 127.0.0.1:8080"] --> CTRL
+
+    subgraph CTRL["controller da categoria · pacote = código OWASP 2025"]
+        VULN["/vulneravel · implementação insegura"]
+        FIX["/corrigido · o princípio certo"]
+    end
+
+    VULN --> OUT["resposta · JSON / HTML / status HTTP (302, 400, 403)"]
+    FIX --> OUT
+
+    LIB["par de biblioteca · a01path, a04crypto (sem endpoint)"]
+
+    TEST["teste JUnit · dispara o exploit real"] -->|"ancora o exploit"| VULN
+    TEST -->|"ancora a correção"| FIX
+    TEST -->|"exercita direto"| LIB
+    TEST --> GATE["mvn verify · 49 testes verdes no CI"]
+```
 
 O nome do pacote é o código do OWASP Top 10:2025. Cada pacote de teste espelha o de produção, então a lição inteira — vulnerável, corrigido e prova — fica na mesma pasta.
 
