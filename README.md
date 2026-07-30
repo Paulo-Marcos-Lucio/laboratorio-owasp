@@ -192,6 +192,24 @@ Escrito aqui para ninguém descobrir depois:
 
 ---
 
+## 🔬 Qualidade de engenharia & método
+
+**Portões (medidos agora com `./mvnw -B verify`):** **49 testes verdes** · formatação **google-java-format estilo AOSP** + remoção de imports não usados via **Spotless** — `spotless:check` reprova o build, 28 arquivos limpos · CI em **job único, Java 21 (temurin)** no `ubuntu-latest`. Sem matriz de versões e **sem gate de cobertura por linha**, por decisão: o portão que importa aqui não é a %, é a **prova exploit × correção** — o exploit passa no `/vulneravel` e é barrado no `/corrigido`, afirmado em teste automatizado.
+
+**Disciplina anti-fachada.** Um teste que passa por acaso ensina errado. [`SsrfDefesaIpTest`](src/test/java/br/com/paulomarcos/labowasp/a01ssrf/SsrfDefesaIpTest.java) coloca `127.0.0.1`, `169.254.169.254` e `10.0.0.5` **dentro** da allowlist de propósito e afirma o **motivo** da recusa (`destino interno bloqueado`), não só o status 400 — assim, se a camada 2 (bloqueio de IP interno) for apagada, o teste fica vermelho em vez de passar por um NXDOMAIN do runner. Dois testes vão na direção oposta e **documentam o limite** do controle: `SsrfLimiteRebindingTest` (a allowlist não impede DNS rebinding — é TOCTOU) e `HashSenhaTest#bcryptSoConsideraOs72PrimeirosBytes`.
+
+**Arquitetura confirmada lendo o código** (11 fontes, 16 classes de teste):
+
+- **Nome do pacote = código do OWASP 2025** (`a01ssrf`, `a04crypto`, `a05sqli`…): a taxonomia é fonte única de verdade, não um comentário solto.
+- **Pacote de teste espelha o de produção** — vulnerável, corrigido e prova moram na mesma pasta.
+- **Defesa em profundidade em duas camadas** no SSRF (allowlist de host → bloqueio de endereço interno); cada correção aplica **o princípio** (parametrização, codificação de saída, confinamento de caminho, BCrypt com sal), não um remendo pontual.
+
+**Cadeia de suprimentos do próprio repo.** Actions do CI **fixadas por SHA** (`checkout`, `setup-java`) + **Dependabot** agrupado (github-actions e maven, mensal); no checkout, `permissions: contents: read` e `persist-credentials: false`. O Surefire fixa `-Dsun.net.inetaddr.ttl=0` para que o teste de rebinding possa mesmo demonstrar o TOCTOU dentro de uma requisição.
+
+**PT-BR em código, teste e doc** é decisão consciente de consistência: nomes de método (`corrigidoBloqueiaIpDeMetadadosDeNuvemAindaQueNaAllowlist`), mensagens de erro e comentários falam a mesma língua — o repo é material de ensino, e a leitura faz parte do produto.
+
+---
+
 ## ⚖️ Uso ético
 
 Material **didático e defensivo**. As técnicas de exploração servem para entender e corrigir a falha — use apenas neste laboratório ou em sistema para o qual você tenha **autorização por escrito**, com escopo e janela definidos.
