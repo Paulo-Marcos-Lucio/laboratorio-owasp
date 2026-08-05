@@ -1,0 +1,51 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Semanal (segunda 06:13 UTC) — pega CVE nova em regra que o código já dispara.
+    - cron: "13 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analise:
+    name: Análise CodeQL (java-kotlin)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write # exigido pelo upload do SARIF para a aba Security
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Inicializa o CodeQL
+        uses: github/codeql-action/init@5595ccaf912efad79be6eef63a5619ff05969be3 # v4.37.6
+        with:
+          languages: java-kotlin
+          # security-extended acrescenta regras de qualidade de segurança ao pack padrão.
+          queries: security-extended
+      # Build manual pelo wrapper — o autobuild pode escolher o goal errado num
+      # projeto Spring Boot; compilar sem testes é o suficiente para o CodeQL indexar.
+      - name: Compila (mvnw) para o CodeQL indexar
+        run: |
+          chmod +x ./mvnw
+          ./mvnw -B -DskipTests clean compile
+      - name: Executa a análise
+        uses: github/codeql-action/analyze@5595ccaf912efad79be6eef63a5619ff05969be3 # v4.37.6
+        with:
+          category: "/language:java-kotlin"

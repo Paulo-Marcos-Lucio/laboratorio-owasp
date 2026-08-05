@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
 
+# Piso de permissao para o workflow inteiro; o job estreita para o minimo que usa.
 permissions:
   contents: read
 
@@ -17,17 +18,20 @@ jobs:
     name: Formatação · Testes (JUnit)
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
-      # actions fixadas por SHA (a mesma prática que o Esteira exige).
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # actions fixadas por SHA de 40 hex (nunca tag movel — a mesma prática que o Esteira exige).
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
-      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
         with:
           distribution: temurin
           java-version: "21"
           cache: maven
       - run: chmod +x ./mvnw
-      # `verify` engloba o `test` e ainda roda o spotless:check (formatação).
+      # `verify` engloba o `test`, o spotless:check (formatação) e o relatório JaCoCo.
+      # É o mesmo comando do desenvolvedor: se passa aqui, passa lá.
       - name: Formatação e testes (exploit vs correção)
         run: ./mvnw -B verify

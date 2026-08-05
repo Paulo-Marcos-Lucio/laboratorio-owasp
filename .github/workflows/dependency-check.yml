@@ -1,0 +1,53 @@
+name: OWASP Dependency-Check
+
+# Autoauditoria: um laboratório de AppSec tem de resistir à própria régua.
+# O OWASP Dependency-Check varre as dependências declaradas contra a NVD e publica
+# o resultado como SARIF na aba Security. É REPORT-ONLY de propósito: um CVE novo
+# numa dependência transitiva do Spring Boot não pode deixar a árvore vermelha por
+# algo fora do escopo da lição — a NVD muda todo dia. O gate de PR é o Dependency
+# Review; aqui o objetivo é visibilidade contínua.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "27 6 * * 1" # segunda, 06:27 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  auditoria:
+    name: Varredura de dependências (OWASP)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write # exigido pelo upload do SARIF
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - run: chmod +x ./mvnw
+      - name: OWASP Dependency-Check (SARIF, report-only)
+        run: >
+          ./mvnw -B org.owasp:dependency-check-maven:13.0.0:check
+          -Dformats=SARIF,HTML
+          -DfailBuildOnCVSS=11
+          -DnvdApiDelay=8000
+          -DnvdApiKey=${{ secrets.NVD_API_KEY }}
+      - name: Publica o SARIF na aba Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@5595ccaf912efad79be6eef63a5619ff05969be3 # v4.37.6
+        with:
+          sarif_file: target/dependency-check-report.sarif
+          category: owasp-dependency-check
