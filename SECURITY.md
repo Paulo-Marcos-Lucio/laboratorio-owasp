@@ -10,7 +10,7 @@ Está **dentro** do escopo: qualquer problema **fora do escopo educativo** — c
 
 Está **fora** do escopo: as vulnerabilidades dos endpoints `/vulneravel`. Elas são a razão de o repositório existir e estão documentadas no README.
 
-Reporte de forma privada para **pmlsp23@gmail.com** com o prefixo `[security]`. Este é um projeto educativo mantido por uma pessoa; os relatos são lidos e respondidos assim que possível.
+Reporte de forma privada para **contatopml26@gmail.com** com o prefixo `[security]`. Este é um projeto educativo mantido por uma pessoa; os relatos são lidos e respondidos assim que possível.
 
 ## Enquadramento legal (Brasil)
 
