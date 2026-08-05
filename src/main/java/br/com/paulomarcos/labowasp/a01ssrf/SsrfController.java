@@ -54,7 +54,7 @@ public class SsrfController {
 
     public SsrfController(
             HttpBuscador buscador,
-            @Value("${ssrf.allowlist:api.exemplo.com,cdn.exemplo.com}") List<String> allowlist) {
+            @Value("${ssrf.allowlist:api.example.com,cdn.example.com}") List<String> allowlist) {
         this.buscador = buscador;
         this.allowlist =
                 allowlist.stream()

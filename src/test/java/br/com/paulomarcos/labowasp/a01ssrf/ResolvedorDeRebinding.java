@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public final class ResolvedorDeRebinding extends InetAddressResolverProvider {
 
     /** O único nome que este resolvedor intercepta. */
-    public static final String HOST = "rebind.exemplo.com";
+    public static final String HOST = "rebind.example.com";
 
     private static final AtomicInteger CONSULTAS = new AtomicInteger();
 

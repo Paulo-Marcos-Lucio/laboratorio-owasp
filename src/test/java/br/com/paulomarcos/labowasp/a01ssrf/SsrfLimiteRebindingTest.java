@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * público e a conexão sai para o loopback.
  *
  * <p>Montagem: {@link ResolvedorDeRebinding} devolve 203.0.113.10 na 1ª consulta de {@code
- * rebind.exemplo.com} e 127.0.0.1 depois; um {@link HttpServer} de loopback guarda o segredo; a
+ * rebind.example.com} e 127.0.0.1 depois; um {@link HttpServer} de loopback guarda o segredo; a
  * allowlist contém o host. O cache de DNS da JVM está desligado no {@code pom.xml} ({@code
  * -Dsun.net.inetaddr.ttl=0}) para o rebinding caber numa única requisição — num alvo real o
  * atacante simplesmente espera o TTL expirar.

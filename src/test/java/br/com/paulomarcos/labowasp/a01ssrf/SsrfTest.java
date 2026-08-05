@@ -96,7 +96,7 @@ class SsrfTest {
         // file: é vetor clássico de SSRF para ler arquivos locais do servidor. O host está
         // DENTRO da allowlist padrão de propósito: se o guard de esquema for removido, a
         // requisição não cai em nenhuma outra guarda e o teste fica vermelho.
-        mvc.perform(get("/a01/ssrf/corrigido").param("url", "file://api.exemplo.com/etc/passwd"))
+        mvc.perform(get("/a01/ssrf/corrigido").param("url", "file://api.example.com/etc/passwd"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("esquema nao permitido"));
     }
