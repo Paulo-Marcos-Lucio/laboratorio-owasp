@@ -9,11 +9,14 @@
 *Uma aplicação **Spring Boot** para **aprender AppSec com código que roda**, não com slide. Cada categoria do OWASP Top 10:2025 é um par de endpoints no mesmo controller — `/vulneravel` e `/corrigido`: a requisição entra, cai num dos dois lados e volta como JSON, HTML ou status HTTP. Um **teste automatizado ancora cada lado** — dispara o exploit real, confirma que ele passa no vulnerável e é barrado no corrigido. São **49 testes verdes** ao todo: o "diagnóstico e correção" em código executável, no stack Java.*
 
 [![CI](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml/badge.svg)](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/codeql.yml/badge.svg)](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/codeql.yml)
 [![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.16-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![OWASP Top 10 2025: 3 de 10](https://img.shields.io/badge/OWASP_Top_10_2025-3_de_10_categorias-000000.svg)](https://owasp.org/Top10/)
+[![Estilo: google-java-format AOSP (Spotless)](https://img.shields.io/badge/estilo-google--java--format_AOSP-4285F4.svg)](#rodando-os-testes-a-prova)
 [![Testes: 49 verdes](https://img.shields.io/badge/testes-49_verdes-2ea44f.svg)](#rodando-os-testes-a-prova)
+[![Cobertura de linha: 91%](https://img.shields.io/badge/cobertura_de_linha-91%25-2ea44f.svg)](#qualidade-de-engenharia--método)
 
 </div>
 
@@ -191,24 +194,26 @@ Este laboratório é aberto — é a **vitrine** do método "vulnerável → exp
 O fluxo é o mesmo em toda categoria: a requisição entra pelo **Spring Boot** (que só escuta em `127.0.0.1`), cai no **controller da categoria** — lado `/vulneravel` ou `/corrigido` — e volta como **JSON, HTML ou status HTTP**. Um **teste JUnit** ancora os dois lados: dispara o exploit real e exige que ele passe no vulnerável e seja barrado no corrigido, com `mvn verify` reprovando o build se algum lado sair do script. Dois pares — `a01path` e `a04crypto` — pulam o HTTP e são exercitados direto pelo teste (*sem endpoint*).
 
 ```mermaid
-flowchart LR
-    REQ["requisição HTTP · curl -G --data-urlencode"] --> ENG
-    ENG["Spring Boot · escuta só em 127.0.0.1:8080"] --> CTRL
-
-    subgraph CTRL["controller da categoria · pacote = código OWASP 2025"]
-        VULN["/vulneravel · implementação insegura"]
-        FIX["/corrigido · o princípio certo"]
-    end
-
-    VULN --> OUT["resposta · JSON / HTML / status HTTP (302, 400, 403)"]
+flowchart TD
+    REQ["<b>curl -G</b><br/>--data-urlencode · payload"] --> APP["<b>LabOwaspApplication</b><br/>Spring Boot · só 127.0.0.1:8080"]
+    APP --> CTRL["<b>controller da categoria</b><br/>a01* · a05* · pacote = OWASP 2025"]
+    CTRL --> VULN["<b>/vulneravel</b><br/>implementação insegura"]
+    CTRL --> FIX["<b>/corrigido</b><br/>o princípio certo"]
+    VULN --> OUT
     FIX --> OUT
-
-    LIB["par de biblioteca · a01path, a04crypto (sem endpoint)"]
-
-    TEST["teste JUnit · dispara o exploit real"] -->|"ancora o exploit"| VULN
-    TEST -->|"ancora a correção"| FIX
+    subgraph OUT [" Resposta HTTP observável "]
+        direction LR
+        JS["JSON"] ~~~ HT["HTML"] ~~~ R302["302"] ~~~ R400["400"] ~~~ R403["403"]
+    end
+    LIB["<b>a01path · a04crypto</b><br/>par de biblioteca · sem HTTP"]
+    TEST["<b>teste JUnit</b><br/>dispara o exploit real"] -->|"ancora exploit"| VULN
+    TEST -->|"ancora correção"| FIX
     TEST -->|"exercita direto"| LIB
-    TEST --> GATE["mvn verify · 49 testes verdes no CI"]
+    TEST --> GATE["<b>mvn verify</b><br/>49 testes · Spotless · JaCoCo · CI"]
+    classDef nucleo fill:#0e2a24,stroke:#3fb79e,stroke-width:2px,color:#e7ede9;
+    classDef saida fill:#241d0f,stroke:#d6a94e,color:#f5ecd9;
+    class REQ,APP,CTRL,VULN,FIX,LIB,TEST,GATE nucleo;
+    class JS,HT,R302,R400,R403 saida;
 ```
 
 O nome do pacote é o código do OWASP Top 10:2025. Cada pacote de teste espelha o de produção, então a lição inteira — vulnerável, corrigido e prova — fica na mesma pasta.
@@ -239,7 +244,7 @@ Escrito aqui para ninguém descobrir depois:
 
 ## 🔬 Qualidade de engenharia & método
 
-**Portões (medidos agora com `./mvnw -B verify`):** **49 testes verdes** · formatação **google-java-format estilo AOSP** + remoção de imports não usados via **Spotless** — `spotless:check` reprova o build, 28 arquivos limpos · CI em **job único, Java 21 (temurin)** no `ubuntu-latest`. Sem matriz de versões e **sem gate de cobertura por linha**, por decisão: o portão que importa aqui não é a %, é a **prova exploit × correção** — o exploit passa no `/vulneravel` e é barrado no `/corrigido`, afirmado em teste automatizado.
+**Portões (medidos agora com `./mvnw -B verify`):** **49 testes verdes** · formatação **google-java-format estilo AOSP** + remoção de imports não usados via **Spotless** — `spotless:check` reprova o build, 28 arquivos limpos · CI em **job único, Java 21 (temurin)** no `ubuntu-latest`. O **JaCoCo mede** a cobertura e emite o relatório (medido agora: **91% de linha, 85% de branch**), mas **não gateia por %**, por decisão: o portão que importa aqui não é a %, é a **prova exploit × correção** — o exploit passa no `/vulneravel` e é barrado no `/corrigido`, afirmado em teste automatizado. Medir sem gatear mantém a % honesta e visível sem transformar a régua num teatro de número.
 
 **Disciplina anti-fachada.** Um teste que passa por acaso ensina errado. [`SsrfDefesaIpTest`](src/test/java/br/com/paulomarcos/labowasp/a01ssrf/SsrfDefesaIpTest.java) coloca `127.0.0.1`, `169.254.169.254` e `10.0.0.5` **dentro** da allowlist de propósito e afirma o **motivo** da recusa (`destino interno bloqueado`), não só o status 400 — assim, se a camada 2 (bloqueio de IP interno) for apagada, o teste fica vermelho em vez de passar por um NXDOMAIN do runner. Dois testes vão na direção oposta e **documentam o limite** do controle: `SsrfLimiteRebindingTest` (a allowlist não impede DNS rebinding — é TOCTOU) e `HashSenhaTest#bcryptSoConsideraOs72PrimeirosBytes`.
 
@@ -249,7 +254,7 @@ Escrito aqui para ninguém descobrir depois:
 - **Pacote de teste espelha o de produção** — vulnerável, corrigido e prova moram na mesma pasta.
 - **Defesa em profundidade em duas camadas** no SSRF (allowlist de host → bloqueio de endereço interno); cada correção aplica **o princípio** (parametrização, codificação de saída, confinamento de caminho, BCrypt com sal), não um remendo pontual.
 
-**Cadeia de suprimentos do próprio repo.** Actions do CI **fixadas por SHA** (`checkout`, `setup-java`) + **Dependabot** agrupado (github-actions e maven, mensal); no checkout, `permissions: contents: read` e `persist-credentials: false`. O Surefire fixa `-Dsun.net.inetaddr.ttl=0` para que o teste de rebinding possa mesmo demonstrar o TOCTOU dentro de uma requisição.
+**Cadeia de suprimentos e autoauditoria do próprio repo.** Todas as actions **fixadas por SHA de 40 hex** (nunca tag móvel), com `permissions:` mínimo por job, `timeout-minutes`, `concurrency` com cancelamento e `persist-credentials: false` no checkout. Além do portão de `verify`, três workflows de segurança auditam o próprio laboratório: **CodeQL** (SAST em `java-kotlin`, `security-extended`, com build manual via `mvnw`, semanal + push/PR), **Dependency Review** (barra na PR dependência nova com CVE alto ou licença incompatível) e **OWASP Dependency-Check** (varre as dependências contra a NVD e publica SARIF na aba Security — *report-only* de propósito, para que um CVE novo em dependência transitiva não avermelhe a árvore por algo fora do escopo da lição). **Dependabot** agrupado (github-actions e maven, semanal). O Surefire fixa `-Dsun.net.inetaddr.ttl=0` para que o teste de rebinding possa mesmo demonstrar o TOCTOU dentro de uma requisição.
 
 **PT-BR em código, teste e doc** é decisão consciente de consistência: nomes de método (`corrigidoBloqueiaIpDeMetadadosDeNuvemAindaQueNaAllowlist`), mensagens de erro e comentários falam a mesma língua — o repo é material de ensino, e a leitura faz parte do produto.
 
