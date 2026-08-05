@@ -64,19 +64,40 @@ Se os testes passam, a demonstração é honesta: a falha é real e **a correç�
 
 ## 🚀 Rodando
 
-Requer **Java 21+**. Não há pacote publicado: clone e rode o wrapper.
+**Pré-requisitos:** só o **JDK 21+** e o **git**. O Maven vem embutido no wrapper (`./mvnw`) — não instale nada além disso. Confira com `java -version` (a primeira linha precisa mostrar `21` ou maior).
+
+### Quickstart — do zero ao primeiro exploit
 
 ```bash
 git clone https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp.git
 cd laboratorio-owasp
-./mvnw spring-boot:run     # sobe em http://127.0.0.1:8080 (só loopback)
+./mvnw spring-boot:run      # sobe em http://127.0.0.1:8080 (só loopback). No Windows: .\mvnw.cmd spring-boot:run
 ```
+
+Na primeira vez o Maven baixa as dependências; espere a linha `Started LabOwaspApplication`. Em **outro terminal**, dispare o primeiro exploit — um SQL Injection que devolve a tabela inteira a partir de uma busca por "Notebook":
+
+```bash
+curl -sG --data-urlencode "nome=Notebook' OR '1'='1" http://localhost:8080/a05/sqli/vulneravel
+# → [{"ID":1,"NOME":"Notebook","PRECO":4500.00},{"ID":2,"NOME":"Mouse","PRECO":120.00},{"ID":3,"NOME":"Teclado","PRECO":250.00}]
+```
+
+Saiu a tabela inteira? O laboratório está no ar. A seção **[Veja o exploit e a correção lado a lado](#veja-o-exploit-e-a-correção-lado-a-lado)** abaixo tem o par `vulneravel`/`corrigido` de cada lição.
 
 Só os testes, sem subir nada — inclusive em Docker:
 
 ```bash
+./mvnw test        # 49 testes; ./mvnw verify inclui a checagem de formatação (Spotless)
 docker run --rm -v "$PWD":/app -w /app maven:3.9-eclipse-temurin-21 mvn verify
 ```
+
+### Configuração
+
+Quase tudo é fixo de propósito — é um laboratório, não um app configurável. Duas propriedades importam:
+
+| Propriedade | Padrão | Para que serve |
+| --- | --- | --- |
+| `ssrf.allowlist` | `api.example.com,cdn.example.com` | Os hosts que o `/a01/ssrf/corrigido` aceita na **camada 1**. Sobrescreva para sentir a defesa mudar: `./mvnw spring-boot:run -Dspring-boot.run.arguments=--ssrf.allowlist=api.example.com` — aí `cdn.example.com` passa a responder `host fora da allowlist`. |
+| `server.address` | `127.0.0.1` | **Não altere.** O bind em loopback é a única coisa que impede `/a05/cmd/vulneravel` (execução de comando arbitrária) de ficar exposto à rede. O teste `ConfiguracaoDeRedeTest` reprova o build se a linha sumir. |
 
 ### Veja o exploit e a correção lado a lado
 
