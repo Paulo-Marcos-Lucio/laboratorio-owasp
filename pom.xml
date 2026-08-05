@@ -13,8 +13,10 @@
           72 primeiros bytes coincidiam. Isso quebrava justamente o lado "corrigido" da licao
           de senha. A partir de 6.3.8/6.4.4 a CVE esta fechada; esta linha (3.5.x) traz 6.5.x,
           que recusa a senha longa no encode. Ver HashSenhaTest.
+          3.5.16 e o ultimo patch da linha 3.5 (jun/2026) — traz os patches de seguranca
+          acumulados sobre o 3.5.7; a subida foi validada rodando `verify` (49 testes verdes).
         -->
-        <version>3.5.7</version>
+        <version>3.5.16</version>
         <relativePath/>
     </parent>
 
@@ -27,6 +29,8 @@
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spotless.version>3.8.0</spotless.version>
+        <jacoco.version>0.8.15</jacoco.version>
     </properties>
 
     <dependencies>
@@ -71,7 +75,7 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.46.1</version>
+                <version>${spotless.version}</version>
                 <configuration>
                     <java>
                         <googleJavaFormat>
@@ -98,8 +102,34 @@
                       dentro de uma unica requisicao: a segunda resolucao viria do cache.
                       Nenhum teste faz DNS de verdade, entao o custo e zero.
                     -->
-                    <argLine>-Dsun.net.inetaddr.ttl=0</argLine>
+                    <argLine>@{argLine} -Dsun.net.inetaddr.ttl=0</argLine>
                 </configuration>
+            </plugin>
+            <!--
+              JaCoCo MEDE a cobertura e emite o relatorio (target/site/jacoco), mas NAO
+              gateia por linha — coerente com a decisao registrada no README: o portao que
+              importa aqui e a prova exploit x correcao, nao a %. O @{argLine} acima injeta
+              o agente do JaCoCo sem sobrescrever o -Dsun.net.inetaddr.ttl=0 do rebinding.
+            -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepara-agente</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>relatorio</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
