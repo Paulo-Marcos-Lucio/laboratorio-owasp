@@ -26,7 +26,7 @@ public class XssController {
 
     @GetMapping(value = "/corrigido", produces = MediaType.TEXT_HTML_VALUE)
     public String corrigido(@RequestParam String q) {
-        // Codificacao de saida: < vira &lt;, quebrando a injecao de script.
+        // Codificação de saída: < vira &lt;, quebrando a injeção de script.
         return "<p>Voce buscou: " + HtmlUtils.htmlEscape(q) + "</p>";
     }
 }
