@@ -15,10 +15,10 @@
 [![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.16-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![OWASP Top 10 2025: 3 of 10](https://img.shields.io/badge/OWASP_Top_10_2025-3_de_10_categorias-000000.svg)](https://owasp.org/Top10/)
-[![Style: google-java-format AOSP (Spotless)](https://img.shields.io/badge/estilo-google--java--format_AOSP-4285F4.svg)](#running-the-tests-the-proof)
-[![Tests: 49 green](https://img.shields.io/badge/testes-49_verdes-2ea44f.svg)](#running-the-tests-the-proof)
-[![Line coverage: 91%](https://img.shields.io/badge/cobertura_de_linha-91%25-2ea44f.svg)](#engineering-quality--method)
+[![OWASP Top 10 2025: 3 of 10](https://img.shields.io/badge/OWASP_Top_10_2025-3_of_10_categories-000000.svg)](https://owasp.org/Top10/)
+[![Style: google-java-format AOSP (Spotless)](https://img.shields.io/badge/style-google--java--format_AOSP-4285F4.svg)](#running-the-tests-the-proof)
+[![Tests: 49 green](https://img.shields.io/badge/tests-49_green-2ea44f.svg)](#running-the-tests-the-proof)
+[![Line coverage: 91%](https://img.shields.io/badge/line_coverage-91%25-2ea44f.svg)](#-engineering-quality--method)
 
 </div>
 
@@ -184,8 +184,8 @@ This lab is open — it's the **showcase** for the "vulnerable → exploit → f
 
 <div align="center">
 
-[![Packages and pricing](https://img.shields.io/badge/Pacotes_e_valores-paulo--marcos--lucio.github.io-0f766e?style=for-the-badge)](https://paulo-marcos-lucio.github.io)
-[![Talk on LinkedIn](https://img.shields.io/badge/LinkedIn-Falar_agora-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paulo-marcos-a07379174/)
+[![Packages and pricing](https://img.shields.io/badge/Packages_and_pricing-paulo--marcos--lucio.github.io-0f766e?style=for-the-badge)](https://paulo-marcos-lucio.github.io)
+[![Talk on LinkedIn](https://img.shields.io/badge/LinkedIn-Talk_now-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paulo-marcos-a07379174/)
 
 </div>
 
