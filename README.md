@@ -1,3 +1,5 @@
+<p align="right"><a href="README.en.md">🇺🇸 Read in English</a></p>
+
 <a href="https://paulo-marcos-lucio.github.io"><img src="https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/banner-abismo-v2.svg" alt="Laboratório OWASP — a cultura que pulsa no laboratório submerso: OWASP Top 10 hands-on (vulnerável, exploit, corrigido)" width="100%"/></a>
 
 <div align="center">
