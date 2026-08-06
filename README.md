@@ -18,7 +18,7 @@
 [![OWASP Top 10 2025: 3 de 10](https://img.shields.io/badge/OWASP_Top_10_2025-3_de_10_categorias-000000.svg)](https://owasp.org/Top10/)
 [![Estilo: google-java-format AOSP (Spotless)](https://img.shields.io/badge/estilo-google--java--format_AOSP-4285F4.svg)](#rodando-os-testes-a-prova)
 [![Testes: 49 verdes](https://img.shields.io/badge/testes-49_verdes-2ea44f.svg)](#rodando-os-testes-a-prova)
-[![Cobertura de linha: 91%](https://img.shields.io/badge/cobertura_de_linha-91%25-2ea44f.svg)](#qualidade-de-engenharia--método)
+[![Cobertura de linha: 91%](https://img.shields.io/badge/cobertura_de_linha-91%25-2ea44f.svg)](#-qualidade-de-engenharia--método)
 
 </div>
 
