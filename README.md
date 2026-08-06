@@ -12,13 +12,13 @@
 
 [![CI](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml/badge.svg)](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/codeql.yml/badge.svg)](https://github.com/Paulo-Marcos-Lucio/laboratorio-owasp/actions/workflows/codeql.yml)
-[![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.16-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![OWASP Top 10 2025: 3 de 10](https://img.shields.io/badge/OWASP_Top_10_2025-3_de_10_categorias-000000.svg)](https://owasp.org/Top10/)
-[![Estilo: google-java-format AOSP (Spotless)](https://img.shields.io/badge/estilo-google--java--format_AOSP-4285F4.svg)](#rodando-os-testes-a-prova)
-[![Testes: 49 verdes](https://img.shields.io/badge/testes-49_verdes-2ea44f.svg)](#rodando-os-testes-a-prova)
-[![Cobertura de linha: 91%](https://img.shields.io/badge/cobertura_de_linha-91%25-2ea44f.svg)](#-qualidade-de-engenharia--método)
+[![Java 21](https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/chip-java.svg)](https://openjdk.org/)
+[![Spring Boot 3.5.16](https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/chip-spring.svg)](https://spring.io/projects/spring-boot)
+[![MIT License](https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/chip-license.svg)](LICENSE)
+[![OWASP Top 10 2025: 3 of 10](https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/chip-owasp.svg)](https://owasp.org/Top10/)
+[![Style: google-java-format AOSP](https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/chip-style.svg)](#rodando-os-testes-a-prova)
+[![49 tests green](https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/chip-tests.svg)](#rodando-os-testes-a-prova)
+[![91% line coverage](https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/chip-coverage.svg)](#-qualidade-de-engenharia--método)
 
 </div>
 
