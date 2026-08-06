@@ -1,3 +1,5 @@
+<p align="center"><a href="CONTRIBUTING.en.md"><img src="https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/btn-lang-en.svg" alt="Read this document in English" width="300"/></a></p>
+
 # Contribuindo
 
 Novas demonstrações de vulnerabilidade são bem-vindas — em especial as sete categorias do OWASP Top 10:2025 que ainda não têm par (A02, A03, A06, A07, A08, A09 e A10).
