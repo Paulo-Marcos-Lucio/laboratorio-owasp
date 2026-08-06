@@ -1,4 +1,4 @@
-<p align="center"><a href="README.en.md"><img src="https://img.shields.io/badge/🇺🇸-READ_IN_ENGLISH-B22234?style=for-the-badge&labelColor=3C3B6E" alt="Read this document in English"/></a></p>
+<p align="center"><a href="README.en.md"><img src="https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/btn-lang-en.svg" alt="Read this document in English" width="300"/></a></p>
 
 <a href="https://paulo-marcos-lucio.github.io"><img src="https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/banner-abismo-v2.svg" alt="Laboratório OWASP — a cultura que pulsa no laboratório submerso: OWASP Top 10 hands-on (vulnerável, exploit, corrigido)" width="100%"/></a>
 
