@@ -1,4 +1,4 @@
-<p align="right"><a href="README.md">🇧🇷 Ler em Português</a></p>
+<p align="center"><a href="README.md"><img src="https://img.shields.io/badge/🇧🇷-LER_EM_PORTUGUES-009739?style=for-the-badge&labelColor=002776" alt="Ler este documento em Português"/></a></p>
 
 <a href="https://paulo-marcos-lucio.github.io"><img src="https://raw.githubusercontent.com/Paulo-Marcos-Lucio/laboratorio-owasp/main/assets/banner-abismo-v2.svg" alt="OWASP Lab — the culture pulsing in the submerged laboratory: OWASP Top 10 hands-on (vulnerable, exploit, fixed)" width="100%"/></a>
 
