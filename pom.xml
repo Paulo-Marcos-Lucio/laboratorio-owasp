@@ -11,10 +11,21 @@
           3.3.4 (set/2024) trazia spring-security-crypto 6.3.3, afetado pela CVE-2025-22228:
           BCryptPasswordEncoder.matches() devolvia true para uma senha ERRADA sempre que os
           72 primeiros bytes coincidiam. Isso quebrava justamente o lado "corrigido" da licao
-          de senha. A partir de 6.3.8/6.4.4 a CVE esta fechada; esta linha (3.5.x) traz 6.5.x,
+          de senha. A partir de 6.3.8/6.4.4 a CVE esta fechada; a linha 3.5.x ja trazia 6.5.x,
           que recusa a senha longa no encode. Ver HashSenhaTest.
-          4.1.0 e o ultimo patch da linha 3.5 (jun/2026) — traz os patches de seguranca
-          acumulados sobre o 3.5.7; a subida foi validada rodando `verify` (49 testes verdes).
+          4.1.0 e salto de major (Spring Boot 4 / Spring Framework 7, PR #7 do Dependabot,
+          bump do grupo maven). Nao muda nenhuma licao: o repo nao usa Spring Security como
+          framework (so spring-security-crypto, uma lib isolada), so MockMvc/MockBean nos
+          testes. A subida exigiu duas mudancas mecanicas de infraestrutura de teste:
+          spring-boot-starter-web -> spring-boot-starter-webmvc (o antigo starter foi
+          descontinuado) e a adicao de spring-boot-starter-webmvc-test, porque o Boot 4
+          tirou o suporte a MockMvc de dentro de spring-boot-test-autoconfigure e moveu para
+          um modulo proprio por tecnologia web. @AutoConfigureMockMvc mudou de pacote
+          (org.springframework.boot.test.autoconfigure.web.servlet ->
+          org.springframework.boot.webmvc.test.autoconfigure) e @MockBean foi removido em
+          favor de @MockitoBean (org.springframework.test.context.bean.override.mockito),
+          que ja era o substituto recomendado desde o 3.4. Validado rodando `verify`
+          (49 testes verdes).
         -->
         <version>4.1.0</version>
         <relativePath/>
@@ -36,7 +47,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -54,6 +65,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--
+          Boot 4 tirou o suporte a MockMvc (@AutoConfigureMockMvc) de dentro de
+          spring-boot-starter-test e passou a exigir este starter à parte, um por
+          tecnologia web. Sem ele o @SpringBootTest sobe mas MockMvc some do contexto.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
