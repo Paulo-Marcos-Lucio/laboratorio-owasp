@@ -5,6 +5,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 
 ## [Não lançado]
 
+## [0.5.0] — 2026-08-14
+
 ### Corrigido
 
 - **A aplicação escutava em `0.0.0.0`** (padrão do Spring Boot), expondo
