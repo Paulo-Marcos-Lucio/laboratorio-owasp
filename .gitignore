@@ -16,3 +16,8 @@ target/
 
 # SO
 .DS_Store
+
+# O repositório é Java, mas .github/scripts/ é Python: rodar o autoteste do
+# classificador de bump localmente deixava __pycache__ sem cobertura aqui.
+__pycache__/
+*.py[cod]
