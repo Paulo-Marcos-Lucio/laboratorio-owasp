@@ -34,7 +34,7 @@ jobs:
           java-version: "21"
           cache: maven
       - name: Inicializa o CodeQL
-        uses: github/codeql-action/init@5595ccaf912efad79be6eef63a5619ff05969be3 # v4.37.6
+        uses: github/codeql-action/init@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # v4.37.7
         with:
           languages: java-kotlin
           # security-extended acrescenta regras de qualidade de segurança ao pack padrão.
@@ -46,6 +46,6 @@ jobs:
           chmod +x ./mvnw
           ./mvnw -B -DskipTests clean compile
       - name: Executa a análise
-        uses: github/codeql-action/analyze@5595ccaf912efad79be6eef63a5619ff05969be3 # v4.37.6
+        uses: github/codeql-action/analyze@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # v4.37.7
         with:
           category: "/language:java-kotlin"
