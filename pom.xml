@@ -13,7 +13,7 @@
           72 primeiros bytes coincidiam. Isso quebrava justamente o lado "corrigido" da licao
           de senha. A partir de 6.3.8/6.4.4 a CVE esta fechada; a linha 3.5.x ja trazia 6.5.x,
           que recusa a senha longa no encode. Ver HashSenhaTest.
-          4.1.0 e salto de major (Spring Boot 4 / Spring Framework 7, PR #7 do Dependabot,
+          4.1.1 e salto de major (Spring Boot 4 / Spring Framework 7, PR #7 do Dependabot,
           bump do grupo maven). Nao muda nenhuma licao: o repo nao usa Spring Security como
           framework (so spring-security-crypto, uma lib isolada), so MockMvc/MockBean nos
           testes. A subida exigiu duas mudancas mecanicas de infraestrutura de teste:
@@ -27,7 +27,7 @@
           que ja era o substituto recomendado desde o 3.4. Validado rodando `verify`
           (49 testes verdes).
         -->
-        <version>4.1.0</version>
+        <version>4.1.1</version>
         <relativePath/>
     </parent>
 
@@ -40,7 +40,7 @@
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spotless.version>3.9.0</spotless.version>
+        <spotless.version>3.10.0</spotless.version>
         <jacoco.version>0.8.15</jacoco.version>
     </properties>
 
