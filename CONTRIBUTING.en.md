@@ -32,3 +32,16 @@ Asserting the **reason** for the refusal (`content().string("host fora da allowl
 ## A Known Limitation Is Also Content
 
 If the fix only solves part of the problem, write that down in the javadoc and, if possible, in a test that **documents the limit** — like `SsrfLimiteRebindingTest`. Promising a defense the code doesn't have is the worst possible flaw in teaching material.
+
+## Definition of Done, the suite's version
+
+The rule above ("the test must fail when the fix disappears") is this
+repository's version of a broader criterion that applies to all five tools
+in the suite:
+[Sentinela's `docs/definicao-de-pronto.md`](https://github.com/Paulo-Marcos-Lucio/sentinela/blob/main/docs/definicao-de-pronto.md)
+(Portuguese) generalizes it as "fixing the example from the report doesn't
+close the item — it needs an invariant that locks the whole class", with
+property-based tests (Hypothesis) in the Python repositories. Here the
+invariant is usually the `vulneravel`/`corrigido` pair plus the test that
+fires the real exploit on both sides, not random generation — the same
+requirement, adapted to this repository's format.
