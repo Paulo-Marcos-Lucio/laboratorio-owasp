@@ -24,3 +24,7 @@ As técnicas demonstradas aqui só podem ser usadas neste laboratório ou em sis
 - **Lei 13.709/2018** (LGPD) — trata do que você faz com qualquer dado pessoal alcançado durante um teste.
 
 Autorização verbal não protege ninguém. Sem contrato ou ordem de serviço assinada, não teste.
+
+## Modelo de ameaças da suíte
+
+Como a suíte AppSec se defende de um alvo hostil — e o que ainda não está fechado — está documentado em [`modelo-de-ameacas.md`](https://github.com/Paulo-Marcos-Lucio/sentinela/blob/main/docs/modelo-de-ameacas.md), no repositório da [Sentinela](https://github.com/Paulo-Marcos-Lucio/sentinela): é ela quem tem superfície de rede (fala HTTP com o alvo escolhido pelo operador). Este repositório é o inverso — o alvo vulnerável de propósito, não uma ferramenta que audita alvo alheio —, por isso não compartilha essa superfície de ameaça; o que este repositório expõe de propósito já está descrito acima e no README.
