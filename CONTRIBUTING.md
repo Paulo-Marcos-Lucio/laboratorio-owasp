@@ -32,3 +32,16 @@ Assertar o **motivo** da recusa (`content().string("host fora da allowlist")`), 
 ## Limite conhecido também é conteúdo
 
 Se a correção só resolve parte do problema, escreva isso no javadoc e, se der, num teste que **documente o limite** — como o `SsrfLimiteRebindingTest`. Prometer uma defesa que o código não tem é o pior defeito possível num material didático.
+
+## Definição de pronto, versão da suíte
+
+A regra acima ("o teste precisa falhar quando a correção sumir") é a versão
+deste repositório de um critério mais amplo, que vale para as cinco
+ferramentas da suíte:
+[`docs/definicao-de-pronto.md` da Sentinela](https://github.com/Paulo-Marcos-Lucio/sentinela/blob/main/docs/definicao-de-pronto.md)
+generaliza para "corrigir o exemplo do relatório não fecha o item — precisa
+de um invariante que tranque a classe inteira", com property-based
+(Hypothesis) nos repositórios Python. Aqui o invariante costuma ser o par
+`vulneravel`/`corrigido` mais o teste que dispara o exploit real nos dois
+lados, não geração aleatória — a mesma exigência, adaptada ao formato deste
+repositório.
